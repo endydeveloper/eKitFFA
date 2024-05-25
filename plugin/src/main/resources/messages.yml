@@ -1,0 +1,155 @@
+onlyPlayers: "&cSolo jugadores pueden hacer esto."
+noConsole: "&cNo puedes hacer esto desde la consola."
+reloaded: "&aPlugin recargado correctamente."
+playerNotOnline: "&cEl jugador no esta conectado."
+mustBeInteger: "&cDebe ser un numero."
+noPermission: "&cNo tienes permisos para hacer esto."
+inCombat: "&cEstas en combate no puedes hacer esto."
+cantSaveEnderChest: "&cNo puedes guardar esto en el cofre de ender."
+spawnNotSet: "&cEl spawn no ha sido establecido."
+noEnderchest: "&cEl bloque que estas viendo no es un cofre de ender."
+enderChestAdded: "&aEl cofre de ender fue agregado."
+enderAlreadyAdded: "&cEste cofre ya fue agregado."
+insuficientArgs: "&cArgumentos insuficientes."
+teleporting: "&aTeletransportando..."
+teleportingCanceled: "&cTeletransporte cancelado."
+spawnSet: "&aEl spawn fue establecido."
+shopNPCSet: "&aEl NPC de tienda fue establecido."
+perkNPCSet: "&aEl NPC de perks fue establecido."
+noCoins: "&cNo tienes la monedas suficientes."
+alreadyHaveItem: "&cYa tienes en tu inventario este item."
+buyItem: "&aCompraste el item con exito."
+maxItems: "&cAlcanzaste el limite de bloques. No puedes obtener mas."
+alreadyHavePerk: "&cYa tienes seleccionado este perk."
+buyPerk: "&aCompraste el perk correctamente."
+selectPerk: "&aSeleccionaste el perk."
+consumeGoldenHead: "&aUsaste &6&lCabeza de oro&a."
+nolevel: "&cNo tienes el nivel suficiente para hacer esto."
+level:
+  set:
+    player: ""
+    target: ""
+levelSet: "&aEstableciste el nivel de &e%player% &aen &e%level%&a."
+enderChest:
+  hasLevel: "&7Click para abrir"
+  noLevel: "&cNivel requerido: 15"
+coins:
+  set:
+    player: "&aEstableciste las monedas de &e%player% &aen &e%coins%&a."
+    target: "&e%player% &ate estableció tu monedas en &e%coins%&a."
+  add:
+    player: "&aDiste &e%coins% &amonedas a &e%player%&a."
+    target: "&e%player% &ate dio &e%coins% &amonedas&a."
+  remove:
+    player: "&aQuitaste &e%coins% &amonedas a &e%player%&a."
+    target: "&e%player% &ate quitó &e%coins% &amonedas."
+shopNPC:
+  - "&e&lTIENDA"
+  - "&7(No permanentes)"
+perkNPC:
+  - "&e&lTIENDA"
+  - "&7(Permanentes)"
+insuficientLevel: "&cNecesitas el nivel <level> para hacer esto."
+combatState: "&cEn combate"
+freeState: "&aLibre"
+firstRegionSet: "&aLa primera posición fue establecida."
+secondRegionSet: "&aLa segunda posición fue establecida."
+regionSetted: "&aLa region fue establecida."
+title:
+  death:
+    enabled: true
+    title: "&c&lHAS MUERTO"
+    subtitle: ""
+    fadeIn: 5
+    stay: 20
+    fadeOut: 5
+  spawn:
+    enabled: true
+    title: "&a&lTELETRANSPORTANDO"
+    subtitle: "&fEspera &a<seconds> &fsegundos."
+    fadeIn: 5
+    stay: 20
+    fadeOut: 5
+  spawnCancelled:
+    enabled: true
+    title: "&c&lTELETRANSPORTE CANCELADO."
+    subtitle: ""
+    fadeIn: 5
+    stay: 10
+    fadeOut: 5
+lore:
+  select: "&eClick para seleccionar."
+  buy: "&e¡Click para comprar!"
+  maxItems: "&cAlcanzaste el limite."
+  alreadyHave: "&C¡Ya lo tienes!"
+  noCoins: "&cNo tienes monedas."
+buildMode:
+  enabled: "&aEl modo de construcción fue activado."
+  disabled: "&aEl modo de construcción fue desactivado."
+actionBar:
+  kill: "&fAsesinaste a &a%player%"
+  assist: "&fAsististe a la muerte de &a%player%"
+  levelUP: "&a¡Felicidades! Subiste de nivel."
+helpCoins:
+  - "&a/thepit coins set <nombre> <coins>"
+  - "&a/thepit coins add <nombre> <coins>"
+  - "&a/thepit coins remove <nombre> <coins>"
+helpAdmin:
+  - "&6&lTHEPIT - ADMIN"
+  - "&f"
+  - "&a/thepit setlevel <jugador> <nivel> - Establece el nivel de un jugador."
+  - "&a/thepit setspawn - Establece el spawn."
+  - "&a/thepit setshop - Establece el NPC de tienda."
+  - "&a/thepit setfirst - Establece la region (1)."
+  - "&a/thepit setsecond - Establece la region (2)."
+
+duel:
+  usage: "&cUsa: /duel <jugador>"
+  self: "&cNo puedes duelarte a ti mismo."
+  notFound: "&cNo se encontro al jugador."
+  alreadyDueling: "&cYa estas en un duelo."
+  targetAlreadyDueling: "&cEl jugador ya esta en un duelo."
+  duelStarted: "&aHas empezado un duelo con &e%player%&a."
+  requestSent: "&aHas enviado un duelo a &e%player%&a."
+  accept: "&a[Aceptar]"
+  acceptHover: "&fClick para aceptar."
+  separator: " "
+  deny: "&c[Rechazar]"
+  denyHover: "&fClick para rechazar."
+  requestInvite:
+    - "&e%player% &ate ha invitado a un duelo."
+    - ""
+    - "{click}."
+  requestAccepted: "&a&e%player% &aacepto tu duelo."
+  requestDenied: "&a&e%player% &arechazo tu duelo."
+  duelCancelled: "&aHas cancelado el duelo."
+  duelEnded: "&aEl duelo ha terminado."
+
+deathMessages:
+  lava:
+    player:
+      - "&a%victim% &ffue empujado a la lava por &e%killer%&f."
+    solo:
+      - "&a%player% &fintentó nadar en lava."
+  fall:
+    player:
+      - "&a%victim% &ffue empujado desde muy alto por &e%killer%."
+    solo:
+      - "&a%player% &fcayo desde muy alto."
+      - "&a%player% &fse resbalo."
+  void:
+    player:
+      - "&a%victim% &ffue tirado al vacio por &e%killer%&f."
+    solo:
+      - "&a%player% &fse suicicido."
+      - "&a%player% &fya no queria vivir mas."
+  player:
+    - "&a%victim% &ffue asesinado por &e%killer%&f."
+  projectile:
+    bow:
+      player:
+        - "&a%killer% &ftiro un flechazo a &e%victim%&f y lo asesino."
+      solo:
+        - "&a%victim% &fse suicido con su propia flecha."
+  unknown:
+    - "&a%player% &fmurio por un razón extraña."

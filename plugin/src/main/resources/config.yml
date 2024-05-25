@@ -1,0 +1,118 @@
+mysql:
+  host: 127.0.0.1
+  port: 3306
+  user: "root"
+  password: "password"
+  database: "thepit"
+
+duel:
+  enabled: false
+
+teleport-cooldown: 10
+enderchest-level: 15
+prevoid-kill: 69
+max-obsidianblocks: 10
+max-arrows: 30
+multipliers:
+  hero: 1.2
+  ultra: 1.4
+  titan: 1.5
+  ultimate: 1.7
+  legend: 2.0
+
+price:
+  diamond-sword: 700
+  obsidian-block: 1000
+  chestplate-diamond: 2000
+  boots-diamond: 1600
+
+perks:
+  level:
+    arrow: 2
+    fishing-rod: 5
+    bow: 2
+    golden-head: 7
+  price:
+    arrow: 1500
+    fishing-rod: 1650
+    bow: 1650
+    golden-head: 2000
+
+titles:
+  death:
+    enabled: true
+    fade-in: 10
+    stay: 20
+    fade-out: 10
+  spawn:
+    enabled: true
+    fade-in: 10
+    stay: 20
+    fade-out: 10
+  spawn-cancelled:
+    enabled: true
+    fade-in: 10
+    stay: 20
+    fade-out: 10
+sounds:
+  death:
+    enabled: true
+    sound: BAT_DEATH
+    volume: 9
+    pitch: 2.0
+  pickup-diamond-armor:
+    enabled: true
+    sound: ORB_PICKUP
+    volume: 9
+    pitch: 2.0
+  spawn:
+    enabled: true
+    sound: ORB_PICKUP
+    volume: 9
+    pitch: 2.0
+  spawn-cancelled:
+    enabled: true
+    sound: BAT_DEATH
+    volume: 9
+    pitch: 2.0
+  kill:
+    enabled: true
+    sound: ORB_PICKUP
+    volume: 9
+    pitch: 2.0
+  levelUP:
+    enabled: true
+    sound: LEVEL_UP
+    volume: 9
+    pitch: 2.0
+  assist:
+    enabled: true
+    sound: ORB_PICKUP
+    volume: 9
+    pitch: 2.0
+
+rewards:
+  kill:
+    gold:
+      min: 5
+      max: 15
+      randomize: true
+    exp:
+      min: 5
+      max: 100
+      randomize: true
+  assist:
+    gold:
+      min: 1
+      max: 5
+      randomize: true
+    exp:
+      min: 1
+      max: 3
+      randomize: true
+
+kill-streak:
+  5:
+    gold: 5
+    exp: 15
+    message: "&a%player% &ftiene un racha de 5 asesinatos."

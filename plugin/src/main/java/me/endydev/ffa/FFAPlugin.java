@@ -1,0 +1,41 @@
+package me.endydev.ffa;
+
+import com.zelicraft.commons.shared.services.Service;
+import me.endydev.ffa.inject.BinderModule;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+import team.unnamed.inject.Inject;
+import team.unnamed.inject.Injector;
+
+public class FFAPlugin extends JavaPlugin {
+
+    @Inject
+    private Service service;
+
+
+    @Override
+    public void onEnable() {
+        Injector injector = Injector.create(new BinderModule(this));
+        injector.injectMembers(this);
+        service.start();
+
+        for(LivingEntity entity : Bukkit.getServer().getWorld("ThePIT").getLivingEntities()) {
+            if(!(entity instanceof Player) || !(entity instanceof ArmorStand)) {
+                entity.remove();
+            }
+        }
+    }
+
+    @Override
+    public void onDisable() {
+        if (service == null) {
+            getLogger().warning("Service is null!");
+            return;
+        }
+
+        service.stop();
+    }
+}

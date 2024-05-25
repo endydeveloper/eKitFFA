@@ -1,0 +1,280 @@
+command:
+  no-permission: "&cNo tienes permisos para hacer esto."
+  console-only: "&cNo puedes hacer esto."
+  player-only: "&cEste comando solo puede ser ejecutado por los jugadores."
+  unknown-command: "&cComando desconocido. Usa &6/ayuda&c."
+  not-enough-arguments: "&cNo proporcionaste los argumentos necesarios."
+  too-many-arguments: "&cProporcionastes muchos argumentos."
+  invalid-argument: "&cArgumento no válido."
+  invalid-number: "&cNumero no válido."
+
+kit:
+  use:
+    kit: "&6&lFFA &8&l» &fSeleccionaste el kit &a%name%&f."
+  create:
+    usage: "&cUsa: /thepit createkit <nombre>"
+    save: "&6&lFFA &8&l» &aKit %name% guardado."
+
+player:
+  not-online: "&6&lFFA &8&l» &cEl jugador no esta conectado."
+
+misc:
+  golden-head: "&6&lFFA &8&l» &aUsaste &6&lCabeza de oro&a."
+  spawn-set: "&6&lFFA &8&l» &aEl spawn fue establecido."
+  spawwn-not-sent: "&6&lFFA &8&l» &cNo existe un lugar de aparición."
+  reloaded: "&6&lFFA &8&l» &fPlugin recargado correctamente."
+  in-combat: "&6&lFFA &8&l» &cEstas en combate."
+  disabled: "&6&lFFA &8&l» &fEsta opción no esta disponible por ahora. Si quieres saber mas información mira nuestro discord."
+
+build-mode:
+  enabled: "&b&lMODO CONSTRUCCIÓN &8&l» &fEl modo construcción fue &aactivado&f."
+  disabled: "&b&lMODO CONSTRUCCIÓN &8&l» &fEl modo construcción fue &cdesactivado&f."
+action-bar:
+  assist: "&fAsesinaste a &a%player%&f."
+  kill: "&fAsististe a la muerte de &a%player%&f."
+  level-up: "&a¡Felicidades! Subiste de nivel."
+titles:
+  death:
+    title: "&c&lHAS MUERTO"
+    subtitle: ""
+  spawn:
+    title: "&a&lTELETRANSPORTANDO"
+    subtitle: "&fEspera &a%seconds% &fsegundos."
+  spawn-cancelled:
+    title: "&c&lTELETRANSPORTE CANCELADO."
+    subtitle: ""
+state:
+  combat: "&cPeleando"
+  free: "&aLibre"
+region:
+  first: "&6&lFFA REGION &8&l» &aLa primera posición fue establecida."
+  second: "&6&lFFA REGION &8&l» &aLa primera posición fue establecida"
+  save: "&6&lFFA REGION &8&l» &aLa región fue guardada."
+teleport:
+  teleporting: "&6&lFFA &8&l» &fTeletransportando..."
+  teleported: "&6&lFFA &8&l» &aTeletransportado."
+  cancel: "&6&lFFA &8&l» &cTeletransporte cancelado."
+coins:
+  no-coins: "&6&lFFA &8&l» &cNo tienes monedas suficientes."
+  set:
+    player: "&6&lFFA &8&l» &aEstableciste las monedas de &e%player% &aen &e%coins%&a."
+    target: "&6&lFFA &8&l» &e%player% &ate estableció tu monedas en &e%coins%&a."
+  add:
+    player: "&6&lFFA &8&l» &aDiste &e%coins% &amonedas a &e%player%&a."
+    target: "&6&lFFA &8&l» &e%player% &ate dio &e%coins% &amonedas&a."
+  remove:
+    player: "&6&lFFA &8&l» &aQuitaste &e%coins% &amonedas a &e%player%&a."
+    target: "&6&lFFA &8&l» &e%player% &ate quitó &e%coins% &amonedas."
+perk:
+  already: "&6&lFFA &8&l» &cYa seleccionaste esta mejora."
+  buy: "&6&lFFA &8&l» &fCompraste esta mejora correctamente."
+  select: "&6&lFFA &8&l» &Seleccionaste esta mejora %perk%&f."
+shop-npc:
+  0: "&e&lTIENDA"
+  1: "&7(No permanentes)"
+perk-npc:
+  0: "&6&lMEJORAS"
+  1: "&7(Permanentes)"
+level:
+  insufficient: "&6&lFFA &8&l» &cNeceistas el nivel %level% para hacer esto."
+  no-level: "&6&lFFA &8&l» &cNo tienes el nivel suficiente."
+  set:
+    player: "&6&lFFA &8&l» "
+ender-chest:
+  has-level: "&7Clic para abrir"
+  no-level: "&cNivel requerido: 15"
+  cant-save: "&6&lFFA &8&l» &cNo puedes guardar esto en el cofre de ender."
+  edit:
+    no-enderchest: "&6&lFFA EDITOR &8&l» &cEl bloque que estas mirando no es un cofre de ender."
+    already-added: "&6&lFFA EDITOR &8&l» &cEl bloque ya fue agregado como cofre de ender."
+    added: "&6&lFFA EDITOR &8&l» &aCofre agregado."
+perks:
+  golden_head: "&6&lCabeza de oro"
+  fishing_rod: "&d&lCaña"
+  arrow: "&aFlechas"
+duel:
+  usage: "&cUsa: /duel <jugador>"
+  self: "&cNo puedes duelarte a ti mismo."
+  not-found: "&cNo se encontro al jugador."
+  already-dueling: "&cYa estas en un duelo."
+  target-already-dueling: "&cEl jugador ya esta en un duelo."
+  duel-started: "&aHas empezado un duelo con &e%player%&a."
+  request-sent: "&aHas enviado un duelo a &e%player%&a."
+  requestInvite:
+    - "&e%player% &ate ha invitado a un duelo."
+    - ""
+    - " <click:run_command:'/duel accept %player%'>&a[Aceptar]</click>   <click:run_command:'/duel deny %player%'>&c[Rechazar]</click>"
+  requestAccepted: "&a&e%player% &aacepto tu duelo."
+  requestDenied: "&a&e%player% &arechazo tu duelo."
+  duelCancelled: "&aCancelaste el duelo."
+  duelEnded: "&aEl duelo ha terminado."
+death-messages:
+  lava:
+    player:
+      - "&a%victim% &ffue empujado a la lava por &e%killer%&f."
+    solo:
+      - "&a%player% &fintentó nadar en lava."
+  fall:
+    player:
+      - "&a%victim% &ffue empujado desde muy alto por &e%killer%."
+    solo:
+      - "&a%player% &fcayo desde muy alto."
+      - "&a%player% &fse resbalo."
+  void:
+    player:
+      - "&a%victim% &ffue tirado al vacio por &e%killer%&f."
+    solo:
+      - "&a%player% &fse suicido."
+      - "&a%player% &fya no queria vivir mas."
+  player:
+    - "&a%victim% &ffue asesinado por &e%killer%&f."
+  projectile:
+    bow:
+      player:
+        - "&a%killer% &ftiro un flechazo a &e%victim%&f y lo asesino."
+      solo:
+        - "&a%victim% &fse suicidó con su propia flecha."
+  unknown:
+    - "&a%player% &fmurió por un razón extraña."
+menus:
+  items:
+    previous:
+      name: "&aPágina anterior"
+    next:
+      name: "&aPágina siguiente"
+  kits:
+    view:
+      title: "&8Menu de kits"
+      kits:
+        survival:
+          name: "&aKit Survival"
+          description:
+            - ""
+      items:
+        has:
+          name: "&a%name%"
+          lore:
+            - ""
+            - "&f Estado: &aDisponible"
+            - "&f"
+            - "&eClic para seleccionar"
+        no-level:
+          name: "&c%name%"
+          lore:
+            - ""
+            - "&fNo tienes el nivel suficiente,"
+            - "&fdebes ser nivel %level%."
+            - "&f"
+            - "&cNo disponible"
+        insufficient:
+          name: "&c%name%"
+          lore:
+            - ""
+            - "&f Precio: &e%price%"
+            - "&f"
+            - "&cNo tienes dinero suficiente"
+        buy:
+          name: "&a%name%"
+          lore:
+            - ""
+            - "&f Precio: &e%price%"
+            - "&f"
+            - "&eClic para comprar"
+    slotcreator:
+      title: "&8Selecciona un slot"
+    creator:
+      title: "&8Creador de Kits"
+      items:
+        item:
+          name: "&aItem"
+          lore:
+            - ""
+            - "&fDebes seleccionar el item de tu inventario"
+            - "&fy hacer clic aquí"
+            - ""
+            - "&eSuelta"
+        permission:
+          enabled:
+            name: "&aPermiso"
+            lore:
+              - ""
+              - "&a ‣ Activado"
+              - "&c ‣ Desactivado"
+              - ""
+              - "&eClic para cambiar"
+          disabled:
+            name: "&aPermiso"
+            lore:
+              - ""
+              - "&c ‣ Activado"
+              - "&a ‣ Desactivado"
+              - ""
+              - "&eClic para cambiar"
+        price:
+          name: "&aPrecio"
+          lore:
+            - ""
+            - "&f Valor: &a%value%"
+            - "&f"
+            - "&eClic Izq. +1"
+            - "&6Shift + Clic Izq. +10"
+            - "&dClic Der. -1"
+            - "&5Shift + Clic Der. -10"
+        level:
+          name: "&aNive requerido"
+          lore:
+            - ""
+            - "&f Valor: &a%value%"
+            - "&f"
+            - "&eClic Izq. +1"
+            - "&6Shift + Clic Izq. +10"
+            - "&dClic Der. -1"
+            - "&5Shift + Clic Der. -10"
+        slot:
+          name: "&aSlot"
+          lore:
+            - ""
+            - "&f Valor: &a%value%"
+            - "&f"
+            - "&eClic para cambiar"
+        page:
+          name: "&aPagina"
+          lore:
+            - ""
+            - "&f Valor: &a%value%"
+            - "&f"
+            - "&eClic Izq. +1"
+            - "&6Shift + Clic Izq. +10"
+            - "&dClic Der. -1"
+            - "&5Shift + Clic Der. -10"
+        save:
+          name: "&aGuardar"
+          lore:
+            - ""
+            - "&eClic para guardar"
+  perks:
+    title: "&8Mejoras permanentes"
+    items:
+      no-upgrade:
+        name: "&cNo tienes esta mejora"
+        lore:
+          - ""
+          - "&cClic para cambiar"
+      buy:
+        has-coins:
+          name: "%name%"
+          lore:
+            - "&fPrecio: &a%price%"
+            - ""
+            - "&eClic para comprar"
+        no-coins:
+          name: "%name%"
+          lore:
+            - "&fPrecio: &a%price%"
+            - ""
+            - "&cNo tienes monedas."
+        buy:
+          name: "%name%"
+          lore:
+            - ""
+            - "&eClic para seleccionar"

@@ -1,0 +1,12 @@
+title:
+  - "&e&lTHEPIT"
+  - "&6&lTHEPIT"
+text:
+  - "&fHola"
+  - "&c%player_name%"
+enabled: true
+updater:
+  title: 20
+  text: 10
+world:
+  - "world"

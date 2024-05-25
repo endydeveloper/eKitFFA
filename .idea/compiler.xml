@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.24/lombok-1.18.24.jar" />
+        </processorPath>
+        <module name="eKitFFA.plugin.main" />
+        <module name="eKitFFA.api.main" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="11">
+      <module name="eKitFFA.api" target="1.8" />
+      <module name="eKitFFA.buildSrc" target="1.8" />
+      <module name="eKitFFA.buildSrc.main" target="1.8" />
+      <module name="eKitFFA.buildSrc.test" target="1.8" />
+      <module name="eKitFFA.plugin" target="1.8" />
+      <module name="eKitFFA.versionsupport" target="1.8" />
+      <module name="eKitFFA.versionsupport.common" target="1.8" />
+      <module name="eKitFFA.versionsupport.common.test" target="1.8" />
+      <module name="eKitFFA.versionsupport.main" target="1.8" />
+      <module name="eKitFFA.versionsupport.test" target="1.8" />
+      <module name="eKitFFA.versionsupport.v1_20_R1" target="1.8" />
+      <module name="eKitFFA.versionsupport.v1_20_R1.test" target="1.8" />
+      <module name="ffa-plugin" target="17" />
+      <module name="ffa-plugin.main" target="17" />
+      <module name="ffa-plugin.test" target="17" />
+      <module name="me.endydev.ffa.eKitFFA.api.main" target="1.8" />
+      <module name="me.endydev.ffa.eKitFFA.api.test" target="1.8" />
+      <module name="me.endydev.ffa.eKitFFA.plugin.main" target="1.8" />
+      <module name="me.endydev.ffa.eKitFFA.plugin.test" target="1.8" />
+      <module name="me.endydev.ffa.eKitFFA.versionsupport.common.main" target="1.8" />
+      <module name="me.endydev.ffa.eKitFFA.versionsupport.v1_20_R1.main" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

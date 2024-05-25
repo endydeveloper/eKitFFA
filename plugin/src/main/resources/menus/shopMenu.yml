@@ -1,0 +1,59 @@
+settings:
+  title: "&8Tienda"
+  rows: 3
+
+updater:
+  enabled: false
+  interval: 5
+
+items:
+  diamondSword:
+    material: DIAMOND_SWORD
+    data: 0
+    hideFlags: true
+    slot: 10
+    displayName: "&aEspada de diamante"
+    lore:
+      - ""
+      - "&7&oLo pierdes al morir"
+      - "&7Precio: &6<price>"
+      - ""
+      - "<lore>"
+  obsidianBlock:
+    material: OBSIDIAN
+    data: 0
+    hideFlags: true
+    slot: 11
+    displayName: "&aBloque de obsidiana"
+    lore:
+      - ""
+      - "&7Dura 2 minutos despues de ponerlo."
+      - ""
+      - "&7&oLo pierdes al morir"
+      - "&fPrecio: &6<price>"
+      - ""
+      - "<lore>"
+  chestplateDiamond:
+    material: DIAMOND_CHESTPLATE
+    data: 0
+    hideFlags: true
+    slot: 15
+    displayName: "&aPeto de diamante"
+    lore:
+      - ""
+      - "&7&oLo pierdes al morir"
+      - "&fPrecio: &6<price>"
+      - ""
+      - "<lore>"
+  bootsDiamond:
+    material: DIAMOND_BOOTS
+    data: 0
+    hideFlags: true
+    slot: 16
+    displayName: "&aBotas de diamante"
+    lore:
+      - ""
+      - "&7&oLo pierdes al morir"
+      - "&fPrecio: &6<price>"
+      - ""
+      - "<lore>"

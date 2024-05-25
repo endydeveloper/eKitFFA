@@ -1,0 +1,44 @@
+[versions]
+commons = "2024.5"
+nmessage = "7.2.0"
+retrofit = "2.9.0"
+
+[plugins]
+shadow = "com.github.johnrengelman.shadow:7.1.2"
+paperweight = "io.papermc.paperweight.userdev:1.5.5"
+bukkitPlugin = "net.minecrell.plugin-yml.bukkit:0.5.1"
+
+[libraries]
+postgresql = "org.postgresql:postgresql:42.7.0"
+hikaricp = "com.zaxxer:HikariCP:4.0.3"
+jooq = "org.jooq:jooq:3.14.16"
+coreapi = { module = "com.zelicraft.core:api", version.ref = "commons" }
+nmessage-core = { module = "me.yushust.message:core", version.ref = "nmessage" }
+nmessage-sourcetype-bukkit-yml = { module = "me.yushust.message:sourcetype-bukkit-yml", version.ref = "nmessage" }
+inject = "team.unnamed:inject:2.0.0"
+spigot = "org.spigotmc:spigot:1.8.8-R0.1-SNAPSHOT"
+triumphcmd = "dev.triumphteam:triumph-cmd-bukkit:2.0.0-SNAPSHOT"
+vault = "com.github.MilkBowl:VaultAPI:1.7.1"
+placeholderapi = "me.clip:placeholderapi:2.11.5"
+viaversion = "com.viaversion:viaversion-api:4.6.2"
+xseries = "com.github.cryptomorin:XSeries:9.10.0"
+triumphgui = "dev.triumphteam:triumph-gui:3.1.2"
+protocollib = "com.comphenix.protocol:ProtocolLib:5.0.0"
+lombok = "org.projectlombok:lombok:1.18.24"
+fastboard = "fr.mrmicky:fastboard:1.2.1"
+anvilgui = "net.wesjd:anvilgui:1.7.0-SNAPSHOT"
+gson = "com.google.code.gson:gson:2.10.1"
+jedis = "redis.clients:jedis:4.3.1"
+buycraftx = "com.github.tebexio.BuycraftX:buycraftx-common:aaee088"
+jackson = "com.fasterxml.jackson.core:jackson-databind:2.14.0"
+bossbarapi = "org.inventivetalent:bossbarapi:2.4.3-SNAPSHOT"
+junit = "junit:junit:4.13.2"
+junit-jupiter = "org.junit.jupiter:junit-jupiter:5.8.2"
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+retrofit-jackson = { module = "com.squareup.retrofit2:converter-jackson", version.ref = "retrofit" }
+
+[bundles]
+nmessage = [ "nmessage-core", "nmessage-sourcetype-bukkit-yml" ]
+junit = [ "junit", "junit-jupiter" ]
+retrofit = [ "retrofit", "retrofit-gson", "retrofit-jackson" ]

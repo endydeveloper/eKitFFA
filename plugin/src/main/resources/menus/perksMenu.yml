@@ -1,0 +1,68 @@
+
+settings:
+  title: "&8Mejoras permanentes"
+  rows: 3
+
+updater:
+  enabled: false
+  interval: 5
+
+items:
+  back:
+    material: SKULL_ITEM
+    skull: "base64-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmQ2OWUwNmU1ZGFkZmQ4NGU1ZjNkMWMyMTA2M2YyNTUzYjJmYTk0NWVlMWQ0ZDcxNTJmZGM1NDI1YmMxMmE5In19fQ=="
+    data: 3
+    hideFlags: true
+    slot: 18
+    displayName: "&aVolver"
+    lore:
+      - ""
+  deselectPerk:
+    material: BARRIER
+    data: 3
+    slot: 22
+    hideFlags: true
+    displayName: "&cDeseleccionar perk"
+    lore:
+      - ""
+      - "&eClick para deseleccionar perk"
+  noPerk:
+    material: SKULL_ITEM
+    skull: "base64-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2VkMWFiYTczZjYzOWY0YmM0MmJkNDgxOTZjNzE1MTk3YmUyNzEyYzNiOTYyYzk3ZWJmOWU5ZWQ4ZWZhMDI1In19fQ=="
+    data: 3
+    hideFlags: true
+    displayName: "&cNo tienes esta mejora."
+    lore:
+      - ""
+      - "&eClick para abrir menú"
+  goldenHead:
+    material: SKULL_ITEM
+    skull: "base64-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGFiZDcwM2U1YjhjODhkNGIxZmNmYTk0YTkzNmEwZDZhNGY2YWJhNDQ1Njk2NjNkMzM5MWQ0ODgzMjIzYzUifX19"
+    data: 3
+    hideFlags: true
+    slot: 12
+    displayName: "&6&lCabeza de oro"
+    lore:
+      - "&fPrecio: &6<price>"
+      - ""
+      - "<lore>"
+  fishingRod:
+    material: FISHING_ROD
+    data: 0
+    hideFlags: true
+    slot: 13
+    displayName: "&d&lCaña"
+    lore:
+      - "&fPrecio: &6<price>"
+      - ""
+      - "<lore>"
+  arrow:
+    material: ARROW
+    data: 0
+    hideFlags: true
+    slot: 14
+    displayName: "&aFlechas"
+    lore:
+      - "&fPrecio: &6<price>"
+      - ""
+      - "<lore>"

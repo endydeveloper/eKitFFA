@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/api/eKitFFA.api.main.iml" filepath="$PROJECT_DIR$/.idea/modules/api/eKitFFA.api.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/api/eKitFFA.api.test.iml" filepath="$PROJECT_DIR$/.idea/modules/api/eKitFFA.api.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugin/eKitFFA.plugin.main.iml" filepath="$PROJECT_DIR$/.idea/modules/plugin/eKitFFA.plugin.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugin/eKitFFA.plugin.test.iml" filepath="$PROJECT_DIR$/.idea/modules/plugin/eKitFFA.plugin.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/versionsupport/common/eKitFFA.versionsupport.common.main.iml" filepath="$PROJECT_DIR$/.idea/modules/versionsupport/common/eKitFFA.versionsupport.common.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/versionsupport/v1_20_R1/eKitFFA.versionsupport.v1_20_R1.main.iml" filepath="$PROJECT_DIR$/.idea/modules/versionsupport/v1_20_R1/eKitFFA.versionsupport.v1_20_R1.main.iml" />
+    </modules>
+  </component>
+</project>
