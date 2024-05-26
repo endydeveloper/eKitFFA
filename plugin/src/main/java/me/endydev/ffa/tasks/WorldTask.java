@@ -45,16 +45,5 @@ public class WorldTask implements Runnable {
                 entity.remove();
             }
         }
-
-        for (World w : Bukkit.getServer().getWorlds()) {
-            w.setTime(0L);
-            for (Entity entity : w.getEntities()) {
-                if(entity instanceof Player) {
-                    continue;
-                }
-
-                entity.remove();
-            }
-        }
     }
 }
