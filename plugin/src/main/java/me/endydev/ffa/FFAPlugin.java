@@ -1,9 +1,14 @@
 package me.endydev.ffa;
 
 import com.zelicraft.commons.shared.services.Service;
+import me.endydev.ffa.configuration.ConfigFile;
 import me.endydev.ffa.inject.BinderModule;
+import me.endydev.ffa.utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,12 +26,6 @@ public class FFAPlugin extends JavaPlugin {
         Injector injector = Injector.create(new BinderModule(this));
         injector.injectMembers(this);
         service.start();
-
-        for(LivingEntity entity : Bukkit.getServer().getWorld("ThePIT").getLivingEntities()) {
-            if(!(entity instanceof Player) || !(entity instanceof ArmorStand)) {
-                entity.remove();
-            }
-        }
     }
 
     @Override

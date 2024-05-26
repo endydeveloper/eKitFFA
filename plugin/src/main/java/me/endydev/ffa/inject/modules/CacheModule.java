@@ -2,6 +2,7 @@ package me.endydev.ffa.inject.modules;
 
 import com.zelicraft.commons.shared.cache.LocalObjectCache;
 import com.zelicraft.commons.shared.cache.ObjectCache;
+import me.endydev.ffa.api.data.TemporalBlock;
 import me.endydev.ffa.api.data.TemporalDropItem;
 import me.endydev.ffa.api.data.kit.KitCreate;
 import me.endydev.ffa.api.menus.CoreBaseMenu;
@@ -40,6 +41,12 @@ public class CacheModule extends AbstractModule {
     @Singleton
     @Provides
     private ObjectCache<UUID, TemporalDropItem> provideTempoDropItem() {
+        return new LocalObjectCache<>();
+    }
+
+    @Singleton
+    @Provides
+    private ObjectCache<String, TemporalBlock> provideTempBlock() {
         return new LocalObjectCache<>();
     }
 

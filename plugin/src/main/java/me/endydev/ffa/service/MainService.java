@@ -3,6 +3,7 @@ package me.endydev.ffa.service;
 import com.zelicraft.commons.shared.cache.ObjectCache;
 import me.endydev.ffa.FFAPlugin;
 import com.zelicraft.commons.shared.services.Service;
+import me.endydev.ffa.api.data.TemporalBlock;
 import me.endydev.ffa.api.data.TemporalDropItem;
 import me.endydev.ffa.configuration.ConfigFile;
 import me.endydev.ffa.database.Database;
@@ -20,9 +21,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import team.unnamed.inject.Inject;
 import team.unnamed.inject.Named;
 
@@ -96,11 +95,26 @@ public class MainService implements Service {
             papiHook.register();
         }
 
-        for (World w : Bukkit.getServer().getWorlds()) {
-            for (Entity entity : w.getEntities()) {
-                if(entity instanceof Player) {
+        if(configFile.contains("spawn")) {
+            Location location = Utils.getLocationSection(configFile.getConfigurationSection("spawn"));
+            if(location == null) {
+                return;
+            }
+
+            World world = location.getWorld();
+            for (Entity entity : world.getEntities()) {
+                if(entity instanceof Player || entity instanceof ArmorStand) {
                     continue;
                 }
+
+                entity.remove();
+            }
+
+            for (LivingEntity entity : world.getLivingEntities()) {
+                if(entity instanceof Player || entity instanceof ArmorStand) {
+                    continue;
+                }
+
                 entity.remove();
             }
         }
@@ -129,10 +143,11 @@ public class MainService implements Service {
         }
 
         database.close();
-        for (Block block : gameManager.getObsidianBlocks().keySet()) {
-            gameManager.getObsidianBlocks().get(block).cancel();
-            block.setType(Material.AIR);
+        for (TemporalBlock block : gameManager.getBlocks().values()) {
+            block.getBlock().setType(Material.AIR);
         }
+        gameManager.getBlocks().clear();
+
         for (TemporalDropItem item : gameManager.getDroppedItems().values()) {
             item.getItem().remove();
             gameManager.removeDroppedItem(item.getUuid());

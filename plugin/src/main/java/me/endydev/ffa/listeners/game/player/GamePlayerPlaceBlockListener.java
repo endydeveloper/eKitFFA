@@ -25,34 +25,21 @@ public class GamePlayerPlaceBlockListener implements Listener {
     @EventHandler
     public void onPlaceBlock(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        if(!gameManager.isBuildMode(player.getUniqueId())) {
-            if (event.getPlayer().hasPermission("thepit.admin")) {
-                event.setCancelled(false);
-                return;
-            }
-        }
-
-        if (event.getBlock().getType().equals(Material.OBSIDIAN)) {
-            BukkitTask task = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    gameManager.removeObisidianBlock(event.getBlock());
-                }
-            }.runTaskLater(plugin, 20L * 120L);
-            gameManager.addObsidianBlock(event.getBlock(), task);
+        if(gameManager.isBuildMode(player.getUniqueId()) && event.getPlayer().hasPermission("thepit.admin")) {
+            event.setCancelled(false);
             return;
         }
 
-        if (event.getBlock().getTypeId() == 11 || event.getBlock().getTypeId() == 10) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    event.getBlock().setType(Material.AIR);
-                }
-            }.runTaskLater(plugin, 100L);
+        if(gameManager.containsRegion(event.getBlock().getLocation())) {
+            event.setCancelled(true);
             return;
         }
 
-        event.setCancelled(true);
+        if (event.getBlock().getType().equals(Material.WATER) || event.getBlock().getType().equals(Material.LAVA)) {
+
+            return;
+        }
+
+        gameManager.addBlock(event.getBlock(), 30000);
     }
 }

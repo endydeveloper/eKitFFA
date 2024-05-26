@@ -3,6 +3,7 @@ package me.endydev.ffa.menus.kits;
 import com.zelicraft.core.spigot.api.menus.dto.CreateItemLore;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
+import me.endydev.ffa.FFAPlugin;
 import me.endydev.ffa.api.FFAAPI;
 import me.endydev.ffa.api.data.FFAPlayer;
 import me.endydev.ffa.api.data.kit.KitCreate;
@@ -32,6 +33,9 @@ public class KitsMenu extends CoreBaseMenu {
 
     @Inject
     private MenuService menuService;
+
+    @Inject
+    private FFAPlugin plugin;
 
     @Inject
     private KitManager kitManager;
@@ -93,70 +97,122 @@ public class KitsMenu extends CoreBaseMenu {
 
 
         for (KitInfo kit : kits) {
+            String permission = "kitffa.kit."+kit.getName().toLowerCase();
             String kitName = getLocalizedName(player, kit);
 
-            if(kit.getLevel() > 0 && levelHandler.getLevelFromExperience(ffaPlayer.getXP()) < kit.getLevel()) {
-                gui.setItem(kit.getSlot(), generateItemLore(
-                        CreateItemLore.builder()
-                                .key(KEY + "items.no-level")
-                                .player(player)
-                                .messageHandler(messageHandler)
-                                .itemStack(kit.getMainItem())
-                                .replacing(new Object[]{
-                                        "%name%", kitName,
-                                        "%level%", kit.getLevel(),
-                                        "%price%", kit.getPrice()
-                                })
-                                .build()
-                ).asGuiItem(event -> {
-                    if(event.isRightClick()) {
-                        previewKit(player, kit);
-                        return;
-                    }
-                }));
-                continue;
-            }
+            if(kit.isNeedPermission()) {
+                if(!player.hasPermission(permission)) {
+                    gui.setItem(kit.getSlot(), generateItemLore(
+                            CreateItemLore.builder()
+                                    .key(KEY + "items.no-perm")
+                                    .player(player)
+                                    .messageHandler(messageHandler)
+                                    .itemStack(kit.getMainItem())
+                                    .replacing(new Object[]{
+                                            "%name%", kitName,
+                                            "%level%", kit.getLevel(),
+                                            "%price%", kit.getPrice()
+                                    })
+                                    .build()
+                    ).asGuiItem(event -> {
+                        if(event.isRightClick()) {
+                            previewKit(player, kit);
+                            return;
+                        }
 
-            if(kit.getPrice() > 0 && ffaPlayer.getCoins() < kit.getPrice()) {
-                gui.setItem(kit.getSlot(), generateItemLore(
-                        CreateItemLore.builder()
-                                .key(KEY + "items.insufficient")
-                                .player(player)
-                                .messageHandler(messageHandler)
-                                .itemStack(kit.getMainItem())
-                                .replacing(new Object[]{
-                                        "%name%", kitName,
-                                        "%price%", kit.getPrice()
-                                })
-                                .build()
-                ).asGuiItem(event -> {
-                    if(event.isRightClick()) {
-                        previewKit(player, kit);
-                        return;
-                    }
-                }));
-                continue;
-            }
+                        messageHandler.sendReplacing(player, "kit.use.cant-use", "%name%", kitName);
+                    }));
+                    continue;
+                }
+            } else {
+                if(!player.hasPermission(permission)) {
+                    if(kit.getLevel() > 0 && levelHandler.getLevelFromExperience(ffaPlayer.getXP()) < kit.getLevel()) {
+                        gui.setItem(kit.getSlot(), generateItemLore(
+                                CreateItemLore.builder()
+                                        .key(KEY + "items.no-level")
+                                        .player(player)
+                                        .messageHandler(messageHandler)
+                                        .itemStack(kit.getMainItem())
+                                        .replacing(new Object[]{
+                                                "%name%", kitName,
+                                                "%level%", kit.getLevel(),
+                                                "%price%", kit.getPrice()
+                                        })
+                                        .build()
+                        ).asGuiItem(event -> {
+                            if(event.isRightClick()) {
+                                previewKit(player, kit);
+                                return;
+                            }
 
-            if(kit.getPrice() == 0 && levelHandler.getLevelFromExperience(ffaPlayer.getLevel()) >= kit.getLevel() || player.hasPermission("kitffa.kit." + kit.getName().toLowerCase())) {
-                gui.setItem(kit.getSlot(), generateItemLore(
-                        CreateItemLore.builder()
-                                .key(KEY + "items.has")
-                                .player(player)
-                                .messageHandler(messageHandler)
-                                .itemStack(kit.getMainItem())
-                                .replacing(new Object[]{
-                                        "%name%", kitName,
-                                        "%level%", kit.getLevel()
-                                })
-                                .build()
-                ).asGuiItem(event -> {
-                    if(event.isRightClick()) {
-                        previewKit(player, kit);
-                        return;
+                            messageHandler.sendReplacing(player, "kit.use.no-level", "%name%", kitName);
+                        }));
+                        continue;
                     }
-                }));
-                continue;
+
+                    if(kit.getPrice() > 0) {
+                        if(ffaPlayer.getCoins() < kit.getPrice()) {
+                            gui.setItem(kit.getSlot(), generateItemLore(
+                                    CreateItemLore.builder()
+                                            .key(KEY + "items.insufficient")
+                                            .player(player)
+                                            .messageHandler(messageHandler)
+                                            .itemStack(kit.getMainItem())
+                                            .replacing(new Object[]{
+                                                    "%name%", kitName,
+                                                    "%price%", kit.getPrice()
+                                            })
+                                            .build()
+                            ).asGuiItem(event -> {
+                                if(event.isRightClick()) {
+                                    previewKit(player, kit);
+                                    return;
+                                }
+
+                                messageHandler.sendReplacing(player, "kit.buy.no-coins", "%name%", kitName);
+                            }));
+                            continue;
+                        }
+
+                        if(!player.hasPermission(permission)) {
+                            gui.setItem(kit.getSlot(), generateItemLore(
+                                    CreateItemLore.builder()
+                                            .key(KEY + "items.buy")
+                                            .player(player)
+                                            .messageHandler(messageHandler)
+                                            .itemStack(kit.getMainItem())
+                                            .replacing(new Object[]{
+                                                    "%name%", kitName,
+                                                    "%price%", kit.getPrice()
+                                            })
+                                            .build()
+                            ).asGuiItem(event -> {
+                                if(event.isRightClick()) {
+                                    previewKit(player, kit);
+                                    return;
+                                }
+
+                                if(ffaPlayer.getCoins() < kit.getPrice()) {
+                                    messageHandler.sendReplacing(player, "kit.buy.no-coins", "%name%", kitName);
+                                    return;
+                                }
+
+                                plugin.getServer().dispatchCommand(
+                                        plugin.getServer().getConsoleSender(),
+                                        "lp user " + player.getName() + " permission set " + permission
+                                );
+                                ffaPlayer.removeCoins(kit.getPrice());
+
+                                messageHandler.sendReplacing(player, "kit.use.buy", "%name%", kitName);
+                                plugin.getServer().getScheduler()
+                                        .runTaskLater(plugin, () -> {
+                                            update(player);
+                                        }, 10L);
+                            }));
+                            continue;
+                        }
+                    }
+                }
             }
 
             gui.setItem(kit.getSlot(), generateItemLore(

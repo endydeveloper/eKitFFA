@@ -28,14 +28,17 @@ public class KitInfo {
     private int slot = 0;
     @lombok.Builder.Default
     private int page = 1;
+    @lombok.Builder.Default
+    private boolean onlyDuel = false;
 
     @lombok.Builder.Default
     private Map<Integer, ItemStack> inventory = new HashMap<>();
 
     public void load(Player player) {
         if(inventory.size() < 1) {
-
+            return;
         }
+
         player.getInventory().clear();
 
         for (Map.Entry<Integer, ItemStack> entry : inventory.entrySet()) {

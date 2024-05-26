@@ -12,9 +12,14 @@ items:
   golden-head: "&6&lCabeza de oro"
 
 kit:
+  buy:
+    no-coins: "&6&lFFA &8&l» &cNo tienes el dinero suficiente."
+    buy: "&6&lFFA &8&l» &fCompraste el kit &a%name%&f correctamente."
   use:
     outside: "&6&lFFA &8&l» &cNo puede seleccionar un kit en area de PvP."
     kit: "&6&lFFA &8&l» &fSeleccionaste el kit &a%name%&f."
+    cant-use: "&6&lFFA &8&l» &cNo puedes usar este kit."
+    no-level: "&6&lFFA &8&l» &fNo tienes el nivel suficiente."
   create:
     usage: "&cUsa: /thepit createkit <nombre>"
     save: "&6&lFFA &8&l» &aKit %name% guardado."
@@ -165,6 +170,11 @@ menus:
           description:
             - ""
       items:
+        no-perm:
+          name: "&a%name%"
+          lore:
+            - "&f"
+            - "&cNo disponible"
         has:
           name: "&a%name%"
           lore:
@@ -212,38 +222,55 @@ menus:
             name: "&aPermiso"
             lore:
               - ""
-              - "&a ‣ Activado"
-              - "&c ‣ Desactivado"
+              - "&a&l › Activado"
+              - "&c › Desactivado"
               - ""
               - "&eClic para cambiar"
           disabled:
             name: "&aPermiso"
             lore:
               - ""
-              - "&c ‣ Activado"
-              - "&a ‣ Desactivado"
+              - "&c › Activado"
+              - "&a&l › Desactivado"
+              - ""
+              - "&eClic para cambiar"
+        duel:
+          enabled:
+            name: "&aSolo duelos"
+            lore:
+              - ""
+              - "&a&l › Activado"
+              - "&c › Desactivado"
+              - ""
+              - "&eClic para cambiar"
+          disabled:
+            name: "&aSolo duelos"
+            lore:
+              - ""
+              - "&c › Activado"
+              - "&a&l › Desactivado"
               - ""
               - "&eClic para cambiar"
         price:
           name: "&aPrecio"
           lore:
             - ""
-            - "&f Valor: &a%value%"
+            - "&f Valor: &e%value%"
             - "&f"
-            - "&eClic Izq. +1"
-            - "&6Shift + Clic Izq. +10"
-            - "&dClic Der. -1"
-            - "&5Shift + Clic Der. -10"
+            - "&aClic Izq. +1"
+            - "&2Shift + Clic Izq. +10"
+            - "&cClic Der. -1"
+            - "&4Shift + Clic Der. -10"
         level:
-          name: "&aNive requerido"
+          name: "&aNivel requerido"
           lore:
             - ""
-            - "&f Valor: &a%value%"
+            - "&f Valor: &e%value%"
             - "&f"
-            - "&eClic Izq. +1"
-            - "&6Shift + Clic Izq. +10"
-            - "&dClic Der. -1"
-            - "&5Shift + Clic Der. -10"
+            - "&aClic Izq. +1"
+            - "&2Shift + Clic Izq. +10"
+            - "&cClic Der. -1"
+            - "&4Shift + Clic Der. -10"
         slot:
           name: "&aSlot"
           lore:
@@ -255,12 +282,12 @@ menus:
           name: "&aPagina"
           lore:
             - ""
-            - "&f Valor: &a%value%"
+            - "&f Valor: &e%value%"
             - "&f"
-            - "&eClic Izq. +1"
-            - "&6Shift + Clic Izq. +10"
-            - "&dClic Der. -1"
-            - "&5Shift + Clic Der. -10"
+            - "&aClic Izq. +1"
+            - "&2Shift + Clic Izq. +10"
+            - "&cClic Der. -1"
+            - "&4Shift + Clic Der. -10"
         save:
           name: "&aGuardar"
           lore:

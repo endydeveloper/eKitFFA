@@ -13,6 +13,7 @@ public class KitCreate {
     private final String name;
     private ItemStack mainItem = new ItemStack(Material.DIAMOND_SWORD);
     private boolean permission = true;
+    private boolean onlyDuel = false;
     private int level = 0;
     private int price = 0;
     private int slot = -1;

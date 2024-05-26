@@ -69,7 +69,6 @@ public class KitCreatorMenu extends CoreBaseMenu {
             }
 
             kitCreate.setMainItem(event.getCursor().clone());
-            event.setCursor(new ItemStack(Material.AIR));
             event.setCurrentItem(new ItemStack(Material.AIR));
             update(player);
         }));
@@ -87,6 +86,18 @@ public class KitCreatorMenu extends CoreBaseMenu {
         }));
 
         gui.setItem(2, 4, generateItemLore(
+                CreateItemLore.builder()
+                        .player(player)
+                        .messageHandler(messageHandler)
+                        .itemStack(kitCreate.isOnlyDuel() ? XMaterial.GREEN_STAINED_GLASS_PANE.parseItem() : XMaterial.RED_STAINED_GLASS_PANE.parseItem())
+                        .key(KEY + "items.duel." + (kitCreate.isOnlyDuel() ? "enabled" : "disabled"))
+                        .build()
+        ).asGuiItem(event -> {
+            kitCreate.setOnlyDuel(!kitCreate.isOnlyDuel());
+            update(player);
+        }));
+
+        gui.setItem(2, 5, generateItemLore(
                 CreateItemLore.builder()
                         .player(player)
                         .messageHandler(messageHandler)
@@ -216,7 +227,7 @@ public class KitCreatorMenu extends CoreBaseMenu {
                         .key(KEY + "items.save")
                         .build()
         ).asGuiItem(event -> {
-            if(kitCreate.getSlot() < 0) {
+            if(!kitCreate.isOnlyDuel() && kitCreate.getSlot() < 0) {
                 XSound.ENTITY_VILLAGER_NO.play(player);
                 return;
             }

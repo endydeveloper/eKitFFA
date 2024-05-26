@@ -7,6 +7,7 @@ import dev.triumphteam.gui.builder.item.ItemBuilder;
 import me.endydev.ffa.FFAPlugin;
 import me.endydev.ffa.api.FFAAPI;
 import me.endydev.ffa.api.data.FFAPlayer;
+import me.endydev.ffa.api.data.TemporalBlock;
 import me.endydev.ffa.api.data.TemporalDropItem;
 import me.endydev.ffa.api.handler.level.LevelHandler;
 import me.endydev.ffa.api.perks.PerkType;
@@ -94,8 +95,12 @@ public class GameManager {
 
     @Inject
     private ObjectCache<UUID, TemporalDropItem> droppedItems;
+
+    @Inject
+    private ObjectCache<String, TemporalBlock> blockCache;
+
+
     private final List<String> playersDrop = new ArrayList<>();
-    private final Map<Block, BukkitTask> obsidianBlock = new HashMap<>();
     public Map<UUID, TemporalDropItem> getDroppedItems() {
         return droppedItems.getAll();
     }
@@ -122,14 +127,34 @@ public class GameManager {
         droppedItems.remove(uuid);
     }
 
-    public Map<Block, BukkitTask> getObsidianBlocks() {
-        return obsidianBlock;
+    public Map<String, TemporalBlock> getBlocks() {
+        return blockCache.getAll();
     }
 
-    public void addObsidianBlock(Block block, BukkitTask task) {
-        if(!obsidianBlock.containsKey(block)) {
-            obsidianBlock.put(block, task);
-        }
+    public boolean containsBlock(Location location) {
+        return blockCache.contains(Utils.locationToIdString(location));
+    }
+
+    public Optional<TemporalBlock> getBlock(Location location) {
+        return blockCache.find(Utils.locationToIdString(location));
+    }
+
+    public void addBlock(Block block, int time) {
+        String id = Utils.locationToIdString(block.getLocation());
+        blockCache.add(id, TemporalBlock.of(
+                id,
+                block,
+                block.getLocation(),
+                System.currentTimeMillis()+time
+        ));
+    }
+
+    public void removeBlock(Location location) {
+        getBlock(location)
+                .ifPresent(x -> {
+                    x.getLocation().getBlock().setType(Material.AIR);
+                    blockCache.remove(Utils.locationToIdString(location));
+                });
     }
 
     public void assitKill(Player player) {
@@ -198,14 +223,6 @@ public class GameManager {
 
     public void removeTask(UUID uuid) {
         teleportTask.remove(uuid);
-    }
-
-    public void removeObisidianBlock(Block block) {
-        if(obsidianBlock.containsKey(block)) {
-            obsidianBlock.get(block).cancel();
-        }
-        block.setType(Material.AIR);
-        obsidianBlock.remove(block);
     }
 
     public List<String> getPlayersFalled() {

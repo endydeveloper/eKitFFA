@@ -158,6 +158,10 @@ public class Utils {
         var1.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
     }
 
+    public static String locationToIdString(Location location) {
+        return location.getBlockX()+";"+location.getBlockY()+";"+location.getBlockZ()+";"+location.getWorld().getName();
+    }
+
     public void sendTitle(String key, Player player) {
         ConfigurationSection section = configFile.getConfigurationSection(key);
         if(section.getBoolean("enabled")) {
@@ -342,7 +346,7 @@ public class Utils {
         return text;
     }
 
-    public Location getLocationSection(ConfigurationSection section) {
+    public static Location getLocationSection(ConfigurationSection section) {
         double x = section.getDouble("x");
         double y = section.getDouble("y");
         double z = section.getDouble("z");

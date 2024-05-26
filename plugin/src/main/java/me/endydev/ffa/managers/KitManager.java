@@ -126,9 +126,10 @@ public class KitManager {
                     file.set("info.price", kitCreate.getPrice());
                     file.set("info.slot", kitCreate.getSlot());
                     file.set("info.page", kitCreate.getPage());
-                    file.set("info.item", itemBuilder.build().serialize());
                     file.set("info.need-permission", kitCreate.isPermission());
                     file.set("info.level", kitCreate.getLevel());
+                    file.set("info.duel", kitCreate.isOnlyDuel());
+                    file.set("info.item", itemBuilder.build().serialize());
 
                     PlayerInventory inventory = kitCreate.getPlayer().getInventory();
                     for (int i = 0; i < inventory.getContents().length; i++) {
