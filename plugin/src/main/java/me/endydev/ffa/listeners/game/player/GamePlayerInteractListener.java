@@ -1,5 +1,6 @@
 package me.endydev.ffa.listeners.game.player;
 
+import dev.triumphteam.gui.components.util.ItemNbt;
 import me.endydev.ffa.api.data.FFAPlayer;
 import me.endydev.ffa.api.version.VersionSupport;
 import me.endydev.ffa.configuration.ConfigFile;
@@ -53,7 +54,8 @@ public class GamePlayerInteractListener implements Listener {
             }
         }
 
-        if (meta != null && meta.getDisplayName() != null && ChatColor.stripColor(meta.getDisplayName()).equals("Cabeza de oro")) {
+        String value = ItemNbt.getString(item, "golden-head");
+        if (value != null && (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("1"))) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 80, 1));
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 140, 0));
 
@@ -68,14 +70,15 @@ public class GamePlayerInteractListener implements Listener {
             return;
         }
 
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType() == Material.ENDER_CHEST) {
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType().equals(Material.ENDER_CHEST)) {
             FFAPlayer ffaPlayer = playerDataManager.getPlayer(event.getPlayer().getUniqueId()).orElse(null);
             if (configFile.contains("ender-chests") && configFile.getStringList("ender-chests").size() > 0) {
                 for (String loc : configFile.getStringList("enderChests")) {
                     Location location = Utils.getLocationBlock(loc);
                     Block block = location.getBlock();
-                    if (!block.getLocation().equals(event.getClickedBlock().getLocation())) continue;
-                    if (!location.getBlock().getType().equals(Material.ENDER_CHEST)) continue;
+                    if (!block.getLocation().equals(event.getClickedBlock().getLocation()) || !location.getBlock().getType().equals(Material.ENDER_CHEST)) {
+                        continue;
+                    }
 
                     if (ffaPlayer.getLevel() < configFile.getInt("enderchest-level")) {
                         messageHandler.sendReplacing(event.getPlayer(), "level.insufficient", "%level%", configFile.getInt("enderchest-level"));

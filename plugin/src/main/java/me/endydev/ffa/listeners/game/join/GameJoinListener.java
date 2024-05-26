@@ -6,6 +6,7 @@ import me.endydev.ffa.api.handler.level.LevelHandler;
 import me.endydev.ffa.cache.TagPlayer;
 import me.endydev.ffa.configuration.ConfigFile;
 import me.endydev.ffa.managers.GameManager;
+import me.endydev.ffa.managers.KitManager;
 import me.endydev.ffa.managers.PlayerDataManager;
 import me.endydev.ffa.repositories.FFAPlayerRepository;
 import me.endydev.ffa.utils.Utils;
@@ -32,6 +33,9 @@ public class GameJoinListener implements Listener {
     private LevelHandler levelHandler;
 
     @Inject
+    private KitManager kitManager;
+
+    @Inject
     private ConfigFile configFile;
 
     @Inject
@@ -44,31 +48,19 @@ public class GameJoinListener implements Listener {
         FFAPlayer ffaPlayer = ffaPlayerRepository.createPlayer(player);
         playerDataManager.addPlayer(ffaPlayer);
 
-        boolean hasImportantItem = false;
-
-        for (ItemStack item : player.getInventory().getArmorContents()) {
-            if(item == null) continue;
-            if(item.getType().equals(Material.DIAMOND_CHESTPLATE) || item.getType().equals(Material.DIAMOND_BOOTS)) {
-                hasImportantItem = true;
-                break;
-            }
-        }
+        boolean hasItem = false;
 
         for (ItemStack item : player.getInventory().getContents()) {
-            if(item == null) continue;
-            if(item.getType().equals(Material.DIAMOND_SWORD)
-                    || item.getType().equals(Material.FISHING_ROD)
-                    || item.getType().equals(XMaterial.PLAYER_HEAD.parseMaterial()) && (item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals(Utils.CC("&6&lCabeza de oro")))
-                    || item.getType().equals(Material.DIAMOND_CHESTPLATE)
-                    || item.getType().equals(Material.DIAMOND_BOOTS)
-                    || item.getType().equals(Material.OBSIDIAN) || item.getType().equals(Material.LAVA_BUCKET)) {
-                hasImportantItem = true;
-                break;
+            if(item == null) {
+                continue;
             }
+
+            hasItem = true;
+            break;
         }
 
-        if(!hasImportantItem) {
-            gameManager.setKitToPlayer(player);
+        if(!hasItem) {
+            kitManager.loadKitToPlayer("default", player);
         }
 
         player.setHealth(player.getMaxHealth());
@@ -78,21 +70,10 @@ public class GameJoinListener implements Listener {
             player.teleport(utils.getLocationSection(configFile.getConfigurationSection("spawn")));
         }
 
-        if(ffaPlayer != null) {
-            int level = levelHandler.getLevelFromExperience(ffaPlayer.getXP());
-            player.setLevel(level);
-            player.setExp(calculatePercentage((float) ffaPlayer.getXP(), (float) levelHandler.getExperienceForLevel(level+1)));
-        }
+        gameManager.setLevelBar(player);
 
         gameManager.addTag(new TagPlayer(player));
     }
 
-    public static float calculatePercentage(float value, float max) {
-        if (max == 0) {
-            throw new IllegalArgumentException("El valor máximo no puede ser cero");
-        }
-
-        return value / max;
-    }
 }
 

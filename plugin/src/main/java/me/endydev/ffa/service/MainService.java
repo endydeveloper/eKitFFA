@@ -1,7 +1,9 @@
 package me.endydev.ffa.service;
 
+import com.zelicraft.commons.shared.cache.ObjectCache;
 import me.endydev.ffa.FFAPlugin;
 import com.zelicraft.commons.shared.services.Service;
+import me.endydev.ffa.api.data.TemporalDropItem;
 import me.endydev.ffa.configuration.ConfigFile;
 import me.endydev.ffa.database.Database;
 import me.endydev.ffa.managers.GameManager;
@@ -15,8 +17,10 @@ import me.endydev.ffa.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import team.unnamed.inject.Inject;
@@ -24,6 +28,7 @@ import team.unnamed.inject.Named;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.UUID;
 
 public class MainService implements Service {
 
@@ -53,6 +58,14 @@ public class MainService implements Service {
     private ConfigFile configFile;
 
     @Inject
+    @Named("task")
+    private Service taskService;
+
+    @Inject
+    @Named("repository")
+    private Service repositoryService;
+
+    @Inject
     private Utils utils;
 
     @Inject
@@ -70,19 +83,26 @@ public class MainService implements Service {
     @Inject
     private KitManager kitManager;
 
-    @Inject
-    private RepositoryService repositoryService;
-
     @Override
     public void start() {
         startServices(
                 listenerService,
                 commandService,
                 apiService,
+                taskService,
                 repositoryService
         );
         if(plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             papiHook.register();
+        }
+
+        for (World w : Bukkit.getServer().getWorlds()) {
+            for (Entity entity : w.getEntities()) {
+                if(entity instanceof Player) {
+                    continue;
+                }
+                entity.remove();
+            }
         }
 
         kitManager.loadKits();
@@ -113,10 +133,10 @@ public class MainService implements Service {
             gameManager.getObsidianBlocks().get(block).cancel();
             block.setType(Material.AIR);
         }
-        for (Item item : gameManager.getDroppedItems()) {
-            item.remove();
+        for (TemporalDropItem item : gameManager.getDroppedItems().values()) {
+            item.getItem().remove();
+            gameManager.removeDroppedItem(item.getUuid());
         }
-        gameManager.getObsidianBlocks().clear();
     }
 
     private void startServices(Service... services) {

@@ -110,6 +110,7 @@ public class SimpleFFAAPI implements FFAAPI {
         double xp = ffaPlayer.getXP();
         ffaPlayer.removeXP(amount);
 
+
         double newXP = ffaPlayer.getXP();
 
         plugin.getServer().getPluginManager().callEvent(new PlayerExperienceRemoveEvent(

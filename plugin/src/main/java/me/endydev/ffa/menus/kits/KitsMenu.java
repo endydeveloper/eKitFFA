@@ -42,9 +42,21 @@ public class KitsMenu extends CoreBaseMenu {
     @Inject
     private LevelHandler levelHandler;
 
-    private final String KEY = "menus.kits.view.";
+    @Inject
+    private KitsPreviewMenu kitsPreviewMenu;
+
+    private final String KEY = "menus.kits.list.";
 
     private final Map<UUID, Integer> pageMap = new HashMap<>();
+
+    public String getLocalizedName(Player player, KitInfo kit) {
+        String keyPath = KEY + "kits." + kit.getName().toLowerCase();
+        String kitName = messageHandler.get(player, keyPath + ".name");
+        if (kitName.equalsIgnoreCase(keyPath + ".name")) {
+            kitName = kit.getName();
+        }
+        return kitName;
+    }
 
     @Override
     public void update(Player player) {
@@ -81,30 +93,7 @@ public class KitsMenu extends CoreBaseMenu {
 
 
         for (KitInfo kit : kits) {
-            String keyPath = KEY + "kits." + kit.getName().toLowerCase();
-            String kitName = messageHandler.get(player, keyPath + ".name");
-            if (kitName.equalsIgnoreCase(keyPath + ".name")) {
-                kitName = kit.getName();
-            }
-
-            if(kit.getPrice() == 0 && levelHandler.getLevelFromExperience(ffaPlayer.getLevel()) >= kit.getLevel() || player.hasPermission("kitffa.kit." + kit.getName().toLowerCase())) {
-                gui.setItem(kit.getSlot(), generateItemLore(
-                        CreateItemLore.builder()
-                                .key(KEY + "items.has")
-                                .player(player)
-                                .messageHandler(messageHandler)
-                                .itemStack(kit.getMainItem())
-                                .replacing(new Object[]{
-                                        "%name%", kitName,
-                                })
-                                .build()
-                ).asGuiItem(event -> {
-                    kitManager.getKit(kit.getName())
-                            .ifPresent(k -> k.load(player));
-                    gui.close(player);
-                }));
-                continue;
-            }
+            String kitName = getLocalizedName(player, kit);
 
             if(kit.getLevel() > 0 && levelHandler.getLevelFromExperience(ffaPlayer.getXP()) < kit.getLevel()) {
                 gui.setItem(kit.getSlot(), generateItemLore(
@@ -119,7 +108,12 @@ public class KitsMenu extends CoreBaseMenu {
                                         "%price%", kit.getPrice()
                                 })
                                 .build()
-                ).asGuiItem());
+                ).asGuiItem(event -> {
+                    if(event.isRightClick()) {
+                        previewKit(player, kit);
+                        return;
+                    }
+                }));
                 continue;
             }
 
@@ -135,7 +129,33 @@ public class KitsMenu extends CoreBaseMenu {
                                         "%price%", kit.getPrice()
                                 })
                                 .build()
-                ).asGuiItem());
+                ).asGuiItem(event -> {
+                    if(event.isRightClick()) {
+                        previewKit(player, kit);
+                        return;
+                    }
+                }));
+                continue;
+            }
+
+            if(kit.getPrice() == 0 && levelHandler.getLevelFromExperience(ffaPlayer.getLevel()) >= kit.getLevel() || player.hasPermission("kitffa.kit." + kit.getName().toLowerCase())) {
+                gui.setItem(kit.getSlot(), generateItemLore(
+                        CreateItemLore.builder()
+                                .key(KEY + "items.has")
+                                .player(player)
+                                .messageHandler(messageHandler)
+                                .itemStack(kit.getMainItem())
+                                .replacing(new Object[]{
+                                        "%name%", kitName,
+                                        "%level%", kit.getLevel()
+                                })
+                                .build()
+                ).asGuiItem(event -> {
+                    if(event.isRightClick()) {
+                        previewKit(player, kit);
+                        return;
+                    }
+                }));
                 continue;
             }
 
@@ -150,11 +170,27 @@ public class KitsMenu extends CoreBaseMenu {
                             })
                             .build()
             ).asGuiItem(event -> {
+                if(event.isRightClick()) {
+                    previewKit(player, kit);
+                    return;
+                }
 
+                kitManager.getKit(kit.getName())
+                        .ifPresent(k -> {
+                            k.load(player);
+                            messageHandler.sendReplacing(player, "kit.use.kit", "%name%", getLocalizedName(player, k));
+                        });
+                gui.close(player);
             }));
         }
 
         gui.update();
+    }
+
+    private void previewKit(Player player, KitInfo kit) {
+        menuService.addBackHistory(player.getUniqueId(), KitsMenu.class);
+        menuService.setClickBackMenu(player.getUniqueId());
+        kitsPreviewMenu.open(player, kit.getName());
     }
 
     @Override
@@ -177,6 +213,6 @@ public class KitsMenu extends CoreBaseMenu {
 
     @Override
     public String getTitle(@Nullable Player player, Object... replace) {
-        return null;
+        return "";
     }
 }

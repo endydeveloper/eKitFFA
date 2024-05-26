@@ -1,7 +1,9 @@
 package me.endydev.ffa.listeners.game.player.move;
 
+import me.endydev.ffa.api.version.VersionSupport;
 import me.endydev.ffa.configuration.ConfigFile;
 import me.endydev.ffa.managers.GameManager;
+import me.endydev.ffa.managers.KitManager;
 import me.endydev.ffa.utils.Utils;
 import me.yushust.message.MessageHandler;
 import org.bukkit.Location;
@@ -27,6 +29,12 @@ public class GameMoveListener implements Listener {
     @Inject
     private MessageHandler messageHandler;
 
+    @Inject
+    private VersionSupport versionSupport;
+
+    @Inject
+    private KitManager kitManager;
+
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
@@ -40,7 +48,7 @@ public class GameMoveListener implements Listener {
         if (Math.floor(to.getY()) < configFile.getInt("prevoid-kill")) {
             EntityDamageEvent e = new EntityDamageEvent(player, EntityDamageEvent.DamageCause.VOID, player.getHealth());
             player.setLastDamageCause(e);
-            player.setHealth(0);
+            player.damage(player.getHealth());
             return;
         }
 

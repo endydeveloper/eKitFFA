@@ -8,8 +8,12 @@ command:
   invalid-argument: "&cArgumento no válido."
   invalid-number: "&cNumero no válido."
 
+items:
+  golden-head: "&6&lCabeza de oro"
+
 kit:
   use:
+    outside: "&6&lFFA &8&l» &cNo puede seleccionar un kit en area de PvP."
     kit: "&6&lFFA &8&l» &fSeleccionaste el kit &a%name%&f."
   create:
     usage: "&cUsa: /thepit createkit <nombre>"
@@ -25,13 +29,14 @@ misc:
   reloaded: "&6&lFFA &8&l» &fPlugin recargado correctamente."
   in-combat: "&6&lFFA &8&l» &cEstas en combate."
   disabled: "&6&lFFA &8&l» &fEsta opción no esta disponible por ahora. Si quieres saber mas información mira nuestro discord."
+  reward:
 
 build-mode:
   enabled: "&b&lMODO CONSTRUCCIÓN &8&l» &fEl modo construcción fue &aactivado&f."
   disabled: "&b&lMODO CONSTRUCCIÓN &8&l» &fEl modo construcción fue &cdesactivado&f."
 action-bar:
-  assist: "&fAsesinaste a &a%player%&f."
-  kill: "&fAsististe a la muerte de &a%player%&f."
+  kill: "&fAsesinaste a &a%player%&f."
+  assist: "&fAsististe a la muerte de &a%player%&f."
   level-up: "&a¡Felicidades! Subiste de nivel."
 titles:
   death:
@@ -138,12 +143,21 @@ death-messages:
     - "&a%player% &fmurió por un razón extraña."
 menus:
   items:
+    close:
+      name: "&cCerrar"
+    back:
+      name: "&cVolver"
     previous:
       name: "&aPágina anterior"
     next:
       name: "&aPágina siguiente"
   kits:
-    view:
+    preview:
+      title: "&8Previsualización del kit"
+      items:
+         none:
+           name: "&cNada"
+    list:
       title: "&8Menu de kits"
       kits:
         survival:

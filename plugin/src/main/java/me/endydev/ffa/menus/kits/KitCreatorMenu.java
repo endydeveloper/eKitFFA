@@ -223,6 +223,7 @@ public class KitCreatorMenu extends CoreBaseMenu {
 
             kitManager.createKitFile(name);
             kitManager.setInfoKit(kitCreate);
+            kitCache.remove(player.getUniqueId());
             gui.close(player);
             messageHandler.sendReplacing(player, "kit.create.save", "%name%", kitCreate.getName());
         }));

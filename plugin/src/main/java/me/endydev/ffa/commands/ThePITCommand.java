@@ -10,12 +10,13 @@ import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
 import me.endydev.ffa.api.FFAAPI;
 import me.endydev.ffa.api.data.FFAPlayer;
+import me.endydev.ffa.api.handler.level.LevelHandler;
 import me.endydev.ffa.configuration.ConfigFile;
 import me.endydev.ffa.managers.GameManager;
 import me.endydev.ffa.managers.KitManager;
 import me.endydev.ffa.managers.PlayerDataManager;
 import me.endydev.ffa.managers.RegionManager;
-import me.endydev.ffa.menus.PerksMenu;
+import me.endydev.ffa.menus.perks.PerksMenu;
 import me.endydev.ffa.menus.ShopMenu;
 import me.endydev.ffa.menus.kits.KitCreatorMenu;
 import me.endydev.ffa.utils.Cuboid;
@@ -55,6 +56,9 @@ public class ThePITCommand extends BaseCommand {
 
     @Inject
     private PerksMenu perksMenu;
+
+    @Inject
+    private LevelHandler levelHandler;
     
     @Inject
     private FFAAPI api;
@@ -197,9 +201,9 @@ public class ThePITCommand extends BaseCommand {
             return;
         }
 
-        Player p = Bukkit.getPlayer(args[0]);
+        Player p = Bukkit.getPlayerExact(args[0]);
         if (p == null || !p.isOnline()) {
-            messageHandler.send(player, "playerNotOnline");
+            messageHandler.send(player, "player.not-online");
             return;
         }
 
@@ -219,9 +223,12 @@ public class ThePITCommand extends BaseCommand {
 
         FFAPlayer ffaPlayer = optional.get();
 
-        ffaPlayer.setLevel(Integer.parseInt(args[1]));
-        p.sendMessage(messageHandler.replacing("ffa.level.set.target", "%player%", p.getName(), "%level%", String.valueOf(args[1])));
-        player.sendMessage(messageHandler.replacing("ffa.level.set.player", "%player%", player.getName(), "%level%", String.valueOf(args[1])));
+        int level = Integer.parseInt(args[1]);
+        ffaPlayer.setXP(levelHandler.getExperienceForLevel(level));
+        ffaPlayer.setLevel(level);
+        gameManager.setLevelBar(p);
+        p.sendMessage(messageHandler.replacing(p, "level.set.target", "%player%", p.getName(), "%level%", String.valueOf(args[1])));
+        player.sendMessage(messageHandler.replacing(player, "level.set.player", "%player%", player.getName(), "%level%", String.valueOf(args[1])));
     }
 
     @SubCommand("shop")
@@ -231,11 +238,10 @@ public class ThePITCommand extends BaseCommand {
 
     @SubCommand("perks")
     public void commandPerksMenu(Player player) {
-
         playerDataManager.getPlayer(player.getUniqueId())
                 .ifPresent(playerData -> {
                     if (api.getLevel(player) < 15) {
-                        messageHandler.send(player, "leve.no-level");
+                        messageHandler.send(player, "level.no-level");
                         return;
                     }
 

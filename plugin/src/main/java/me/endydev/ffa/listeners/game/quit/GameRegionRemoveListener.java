@@ -20,7 +20,7 @@ public class GameRegionRemoveListener implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         if (regionManager.getRegion() != null && regionManager.getRegion().contains(event.getPlayer().getLocation())) {
-            playerDataManager.removePlayer(player.getUniqueId());
+
             return;
         }
     }

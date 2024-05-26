@@ -17,6 +17,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -66,15 +67,14 @@ public class GameTagQuitListener implements Listener {
 
         player.setHealth(player.getMaxHealth());
         player.setFoodLevel(20);
-        playerDataManager.getPlayer(player.getUniqueId()).ifPresent(playerData -> playerData.setKillStreak(0));
+        playerDataManager.getPlayer(player.getUniqueId())
+                .ifPresent(playerData -> playerData.setKillStreak(0));
         versionSupport.clearArrowsFromPlayerBody(player);
-        if (!gameManager.getPlayerTag(player).hasAttackers()) {
+        if (!tagPlayer.hasAttackers()) {
             return;
         }
 
-        utils.assitKill(player);
-
-        Player attacker = gameManager.getPlayerTag(player).getLastAttacker();
+        Player attacker = tagPlayer.getLastAttacker();
         FFAPlayer attackerData = playerDataManager.getPlayer(attacker.getUniqueId()).orElse(null);
         if (attackerData == null) {
             return;
@@ -86,8 +86,7 @@ public class GameTagQuitListener implements Listener {
             attackerData.setMaxKillStreak(attackerData.getKillStreak());
         }
 
-        utils.addXP(attacker);
-        utils.addGold(attacker);
+        gameManager.rewardPlayer(attacker, GameManager.RewardType.KILL);
         utils.killStreak(attacker);
 
         if (ffaPlayerRepository.hasPerk(attacker.getUniqueId(), PerkType.GOLDEN_HEAD)) {
@@ -105,7 +104,5 @@ public class GameTagQuitListener implements Listener {
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.sendMessage(utils.replaceDeathMessage(playerCause.get(Utils.randomInt(0, playerCause.size() - 1)), player, gameManager.getPlayerTag(player).getLastAttacker()));
         }
-
-        gameManager.removePlayerTag(player);
     }
 }

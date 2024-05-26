@@ -2,6 +2,7 @@ package me.endydev.ffa.utils;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import dev.triumphteam.gui.builder.item.ItemBuilder;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.endydev.ffa.FFAPlugin;
 import me.endydev.ffa.api.FFAAPI;
@@ -150,20 +151,6 @@ public class Utils {
 
      */
 
-    public void assitKill(Player player) {
-        TagPlayer tagPlayer = gameManager.getPlayerTag(player);
-        if(tagPlayer.getAssister() != null) {
-            playerDataManager.getPlayer(player.getUniqueId())
-                    .ifPresent(playerData -> {
-                        playerData.addCoins(configFile.getInt("assist.gold"));
-                        playerData.addXP(configFile.getInt("assist.xp"));
-                        playerData.addAssist();
-                        versionSupport.playAction(tagPlayer.getAssister(), replaceDeathMessage(messageHandler.get(player, "action-bar.assist"), player));
-                        playSound(configFile.getConfigurationSection("sounds.assist"), tagPlayer.getAssister());
-                    });
-        }
-    }
-
     public void sendPlayer(Player var1, String server) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("Connect");
@@ -248,7 +235,7 @@ public class Utils {
     public void killStreak(Player player) {
         playerDataManager.getPlayer(player.getUniqueId())
                 .ifPresent(playerData -> {
-                    for (String key : configFile.getConfigurationSection("killStreak").getKeys(false)) {
+                    for (String key : configFile.getConfigurationSection("kill-streak").getKeys(false)) {
                         try {
                             Integer.parseInt(key);
                         } catch (Exception e) {
@@ -256,11 +243,11 @@ public class Utils {
                         }
                         int k = Integer.parseInt(key);
                         if(playerData.getKillStreak() == k) {
-                            playerData.addCoins(executeMultiplier(player, configFile.getInt("killStreak." + key + ".gold")));
-                            int totalXP = executeMultiplier(player, configFile.getInt("killStreak." + key + ".exp"));
+                            playerData.addCoins(executeMultiplier(player, configFile.getInt("kill-streak." + key + ".gold")));
+                            int totalXP = executeMultiplier(player, configFile.getInt("kill-streak." + key + ".exp"));
                             playerData.addXP(totalXP);
                             for (Player p : Bukkit.getOnlinePlayers()) {
-                                p.sendMessage(replaceDeathMessage(configFile.getString("killStreak." + key + ".message"), player));
+                                p.sendMessage(replaceDeathMessage(configFile.getString("kill-streak." + key + ".message"), player));
                             }
                             return;
                         }
@@ -269,15 +256,14 @@ public class Utils {
     }
 
     public static ItemStack setUnbreakable(ItemStack itemStack) {
-        ItemMeta meta = itemStack.getItemMeta();
-        meta.spigot().setUnbreakable(true);
-        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-        itemStack.setItemMeta(meta);
-        return itemStack;
+        return ItemBuilder.from(itemStack)
+                .unbreakable(true)
+                .flags(ItemFlag.HIDE_UNBREAKABLE)
+                .build();
     }
 
     public void addGold(Player player) {
-        FFAPlayer ffaPlayer = api.getPlayer(player.getUniqueId()).orElse(null);
+        FFAPlayer ffaPlayer = playerDataManager.getPlayer(player.getUniqueId()).orElse(null);
         if(ffaPlayer == null) {
             return;
         }
@@ -333,16 +319,14 @@ public class Utils {
         int xpToAdd = executeMultiplier(player, configFile.getInt("kill.exp"));
         int level = levelHandler.getLevelFromExperience(ffaPlayer.getXP());
 
-
         ffaPlayer.addXP(xpToAdd);
 
         int neededXP = 5 * (level * level) + 80 * level + 100;
 
         if(ffaPlayer.getXP() > neededXP) {
-            player.setLevel(level+1);
             ffaPlayer.setLevel(level+1);
+            gameManager.setLevelBar(player);
             versionSupport.playAction(player, messageHandler.getMessage("action-bar.level-up"));
-            ffaPlayer.setXP(0);
         }
     }
 

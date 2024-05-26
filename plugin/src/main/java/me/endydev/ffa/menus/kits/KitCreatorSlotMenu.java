@@ -53,6 +53,13 @@ public class KitCreatorSlotMenu extends CoreBaseMenu {
         if (kitCreate == null) {
             return;
         }
+
+        gui.setCloseGuiAction((close) -> {
+            if (!menuService.hasIgnoreClickMenu(player.getUniqueId())) {
+                kitCache.remove(player.getUniqueId());
+            }
+        });
+
         Set<Integer> usedSlots = kitManager.getKitsPage(kitCreate.getPage())
                 .stream()
                 .map(KitInfo::getSlot)
@@ -66,7 +73,10 @@ public class KitCreatorSlotMenu extends CoreBaseMenu {
                     kitCache.add(player.getUniqueId(), kitCreate);
                     menuService.getLastBackHistory(player.getUniqueId())
                             .flatMap(x -> menuService.getMenu(x))
-                            .ifPresent(menu -> menu.open(player, kitCreate.getName()));
+                            .ifPresent(menu -> {
+                                menuService.setIgnoreClickMenu(player.getUniqueId());
+                                menu.open(player, kitCreate.getName());
+                            });
                 }));
 
         for (Integer usedSlot : usedSlots) {
@@ -76,7 +86,10 @@ public class KitCreatorSlotMenu extends CoreBaseMenu {
                     .asGuiItem());
         }
 
-        List<Integer> otherSlots = Lists.newArrayList();
+        List<Integer> otherSlots = Lists.newArrayList(
+                getSlotFromRowCol(6, 1),
+                getSlotFromRowCol(6, 9)
+        );
         for (Integer otherSlot : otherSlots) {
             gui.setItem(otherSlot, ItemBuilder.from(Material.AIR).asGuiItem());
         }

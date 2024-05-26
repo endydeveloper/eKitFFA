@@ -2,6 +2,7 @@ package me.endydev.ffa.inject.modules;
 
 import com.zelicraft.commons.shared.cache.LocalObjectCache;
 import com.zelicraft.commons.shared.cache.ObjectCache;
+import me.endydev.ffa.api.data.TemporalDropItem;
 import me.endydev.ffa.api.data.kit.KitCreate;
 import me.endydev.ffa.api.menus.CoreBaseMenu;
 import me.endydev.ffa.api.perks.PerkType;
@@ -34,6 +35,12 @@ public class CacheModule extends AbstractModule {
                 .bind(PerkType.FISHING_ROD)
                 .to(FishingRodPerk.class)
                 .singleton();
+    }
+
+    @Singleton
+    @Provides
+    private ObjectCache<UUID, TemporalDropItem> provideTempoDropItem() {
+        return new LocalObjectCache<>();
     }
 
     @Singleton

@@ -54,7 +54,7 @@ public class SpawnCommand extends BaseCommand {
             return;
         }
         if(gameManager.getPlayerTag(player).isTagged()) {
-            messageHandler.send(player, "in-combat");
+            messageHandler.send(player, "misc.in-combat");
             return;
         }
 

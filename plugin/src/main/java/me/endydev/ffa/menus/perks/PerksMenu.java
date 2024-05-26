@@ -1,4 +1,4 @@
-package me.endydev.ffa.menus;
+package me.endydev.ffa.menus.perks;
 
 import com.zelicraft.core.spigot.api.menus.CoreBaseMenu;
 import com.zelicraft.core.spigot.api.menus.dto.CreateItemSkullLore;

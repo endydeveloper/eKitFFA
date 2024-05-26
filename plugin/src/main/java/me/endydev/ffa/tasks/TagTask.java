@@ -6,7 +6,7 @@ import team.unnamed.inject.Inject;
 
 import java.util.UUID;
 
-public class TagTask implements Runnable{
+public class TagTask implements Runnable {
     @Inject
     private ObjectCache<UUID, TagPlayer> taggeds;
 

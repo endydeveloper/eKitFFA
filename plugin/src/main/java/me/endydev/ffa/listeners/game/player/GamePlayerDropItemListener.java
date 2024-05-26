@@ -14,14 +14,11 @@ public class GamePlayerDropItemListener implements Listener {
     @EventHandler
     public void dropItem(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
-        if(!gameManager.isBuildMode(player.getUniqueId())) {
-            if (event.getPlayer().hasPermission("thepit.admin")) {
-                event.setCancelled(false);
-                return;
-            }
+        if (gameManager.isBuildMode(player.getUniqueId()) && event.getPlayer().hasPermission("thepit.admin")) {
+            event.setCancelled(false);
+            return;
         }
 
-        event.getItemDrop().remove();
-        event.setCancelled(true);
+        gameManager.addDroppedItem(event.getItemDrop(), 30000);
     }
 }

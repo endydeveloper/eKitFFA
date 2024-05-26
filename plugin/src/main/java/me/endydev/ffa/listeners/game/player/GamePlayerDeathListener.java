@@ -18,6 +18,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import team.unnamed.inject.Inject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GamePlayerDeathListener implements Listener {
 
     @Inject
@@ -44,6 +47,9 @@ public class GamePlayerDeathListener implements Listener {
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
         event.setDeathMessage(null);
+        event.setDroppedExp(0);
+        event.getDrops().clear();
+
         Player player = event.getEntity();
 
         FFAPlayer ffaPlayer = playerDataManager.getPlayer(player.getUniqueId()).orElse(null);
@@ -52,107 +58,22 @@ public class GamePlayerDeathListener implements Listener {
             ffaPlayer.addDeaths();
         }
 
-        if (regionManager.getRegion() != null && !regionManager.getRegion().contains(player.getLocation())) {
 
-            for (ItemStack item : player.getInventory().getArmorContents()) {
-                event.getDrops().remove(item);
-                switch (item.getType()) {
-                    case DIAMOND_CHESTPLATE:
-                        dropItem(player, Material.DIAMOND_CHESTPLATE, item);
-                        break;
-                    case DIAMOND_BOOTS:
-                        dropItem(player, Material.DIAMOND_BOOTS, item);
-                        break;
-                    default:
-                        event.getDrops().remove(item);
-                        item.setType(Material.AIR);
-                        break;
-                }
-            }
-
-            int beef = 0;
-            if (gameManager.getPlayerTag(player).hasAttackers()) {
-                for (ItemStack item : gameManager.getPlayerTag(player).getLastAttacker().getInventory().getContents()) {
-                    if (item == null) continue;
-                    if (item.getType().equals(Material.COOKED_BEEF)) {
-                        beef += item.getAmount();
-                    }
-                }
-            }
-
+        if (!gameManager.containsRegion(player.getLocation())) {
+            List<Item> items = new ArrayList<>();
             for (ItemStack item : player.getInventory().getContents()) {
-                if (item == null) continue;
-
-                Material itemType = item.getType();
-                switch (itemType) {
-                    case COOKED_BEEF:
-                        event.getDrops().remove(item);
-                        if (gameManager.getPlayerTag(player).hasAttackers() && beef < 28) {
-                            Item beefItem = player.getWorld().dropItem(player.getLocation().add(0, 1, 0), new ItemStack(Material.COOKED_BEEF, 5));
-                            scheduleItemRemoval(beefItem);
-                            gameManager.addDroppedItem(beefItem);
-                        }
-                        break;
-                    case SKULL_ITEM:
-                        if (item.hasItemMeta() && Utils.CC("&6&lCabeza de oro").equals(item.getItemMeta().getDisplayName())) {
-                            event.getDrops().remove(item);
-                            Item skullItem = player.getWorld().dropItem(player.getLocation().add(0, 1, 0), new ItemStack(Material.GOLDEN_APPLE, 2));
-                            scheduleItemRemoval(skullItem);
-                            gameManager.addDroppedItem(skullItem);
-                        }
-                        break;
-                    case DIAMOND_CHESTPLATE:
-                    case DIAMOND_BOOTS:
-                    case DIAMOND_SWORD:
-                        event.getDrops().remove(item);
-                        Item diamondItem = player.getWorld().dropItem(player.getLocation().add(0, 1, 0), Utils.setUnbreakable(new ItemStack(itemType, 1)));
-                        scheduleItemRemoval(diamondItem);
-                        gameManager.addDroppedItem(diamondItem);
-                        break;
-                    case ARROW:
-                        event.getDrops().remove(item);
-                        Item arrowItem = player.getWorld().dropItem(player.getLocation().add(0, 1, 0), new ItemStack(Material.ARROW, 10));
-                        scheduleItemRemoval(arrowItem);
-                        gameManager.addDroppedItem(arrowItem);
-                        break;
-                    default:
-                        event.getDrops().remove(item);
-                        item.setType(Material.AIR);
-                        break;
+                if (item == null) {
+                    continue;
                 }
+
+                items.add(player.getWorld().dropItem(player.getLocation().add(0, 1, 0), item));
             }
-        } else {
-            event.getDrops().clear();
+
+            gameManager.addDroppedItem(items, 10000);
         }
 
-        if(ffaPlayer != null) {
-            player.setLevel(ffaPlayer.getLevel());
-        }
-
+        gameManager.setLevelBar(player);
 
         gameManager.removePlayerTag(player);
-    }
-
-    private void scheduleItemRemoval(Item item) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                gameManager.removeDroppedItem(item);
-                item.remove();
-            }
-        }.runTaskLater(plugin, 20L * 60L);
-    }
-
-    private void dropItem(Player player, Material material, ItemStack item) {
-        Item itemDrop = player.getWorld().dropItem(player.getLocation().add(0, 1, 0), Utils.setUnbreakable(new ItemStack(material, 1)));
-        itemDrop.setPickupDelay(40);
-        gameManager.addDroppedItem(itemDrop);
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                gameManager.removeDroppedItem(itemDrop);
-                itemDrop.remove();
-            }
-        }.runTaskLater(plugin, 20L * 60L);
     }
 }

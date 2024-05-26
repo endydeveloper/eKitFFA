@@ -230,8 +230,6 @@ public class FFAPlayerRepository implements IRepository {
     public FFAPlayer getPlayer(UUID uuid) {
         Connection connection = null;
         PreparedStatement select = null;
-        PreparedStatement insert = null;
-        PreparedStatement update = null;
         ResultSet rs = null;
         FFAPlayer ffaPlayer = null;
 
@@ -240,26 +238,26 @@ public class FFAPlayerRepository implements IRepository {
             select = connection.prepareStatement(String.format("SELECT * FROM player_data WHERE UUID = '%s'", uuid.toString()));
             rs = select.executeQuery();
 
-            int kills = rs.getInt("kills");
-            int deaths = rs.getInt("deaths");
-            int assists = rs.getInt("assists");
-            int coins = rs.getInt("coins");
-            int level = rs.getInt("level");
-            int prestige = rs.getInt("prestige");
-            int xp = rs.getInt("xp");
-            int maxKs = rs.getInt("maxks");
-            String kit = rs.getString("kit");
-            PerkType perk1 = PerkType.from(rs.getString("perk1"));
-            PerkType perk2 = PerkType.from(rs.getString("perk2"));
-            PerkType perk3 = PerkType.from(rs.getString("perk3"));
+            if(rs.next()) {
+                int kills = rs.getInt("kills");
+                int deaths = rs.getInt("deaths");
+                int assists = rs.getInt("assists");
+                int coins = rs.getInt("coins");
+                int level = rs.getInt("level");
+                int prestige = rs.getInt("prestige");
+                int xp = rs.getInt("xp");
+                int maxKs = rs.getInt("maxks");
+                String kit = rs.getString("kit");
+                PerkType perk1 = PerkType.from(rs.getString("perk1"));
+                PerkType perk2 = PerkType.from(rs.getString("perk2"));
+                PerkType perk3 = PerkType.from(rs.getString("perk3"));
 
-            ffaPlayer = LocalFFAPlayer.of(uuid, rs.getString("name"), kills, deaths, assists, coins, level, prestige, xp, 0, maxKs, kit, perk1, perk2, perk3);
+                ffaPlayer = LocalFFAPlayer.of(uuid, rs.getString("name"), kills, deaths, assists, coins, level, prestige, xp, 0, maxKs, kit, perk1, perk2, perk3);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            database.close(connection, select, null);
-            database.close(null, insert, rs);
-            database.close(null, update, null);
+            database.close(connection, select, rs);
         }
 
         return ffaPlayer;
@@ -284,7 +282,7 @@ public class FFAPlayerRepository implements IRepository {
             int coins = 0;
             int level = 1;
             int prestige = 0;
-            int xp = 0;
+            double xp = 0.0;
             int maxKs = 0;
             String kit = null;
             PerkType perk1 = PerkType.NONE;
@@ -304,7 +302,7 @@ public class FFAPlayerRepository implements IRepository {
                 coins = rs.getInt("coins");
                 level = rs.getInt("level");
                 prestige = rs.getInt("prestige");
-                xp = rs.getInt("xp");
+                xp = rs.getDouble("xp");
                 maxKs = rs.getInt("maxks");
                 kit = rs.getString("kit");
                 perk1 = PerkType.from(rs.getString("perk1"));

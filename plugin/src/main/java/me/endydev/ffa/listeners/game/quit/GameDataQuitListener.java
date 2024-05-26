@@ -25,5 +25,6 @@ public class GameDataQuitListener implements Listener {
                 .ifPresent(p -> gameManager.savePlayer(p));
 
         playerDataManager.removePlayer(player.getUniqueId());
+        gameManager.removePlayerTag(player);
     }
 }

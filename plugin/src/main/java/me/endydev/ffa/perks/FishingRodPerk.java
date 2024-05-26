@@ -19,4 +19,15 @@ public class FishingRodPerk implements Perk  {
         );
         player.updateInventory();
     }
+
+    @Override
+    public void onPickup(Player player) {
+
+    }
+
+
+    @Override
+    public boolean isPerkItem(ItemStack itemStack) {
+        return false;
+    }
 }

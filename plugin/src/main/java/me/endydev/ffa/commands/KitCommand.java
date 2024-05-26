@@ -5,6 +5,7 @@ import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.Optional;
 import me.endydev.ffa.configuration.ConfigFile;
+import me.endydev.ffa.managers.GameManager;
 import me.endydev.ffa.managers.KitManager;
 import me.endydev.ffa.menus.kits.KitsMenu;
 import me.yushust.message.MessageHandler;
@@ -21,10 +22,18 @@ public class KitCommand extends BaseCommand {
     private MessageHandler messageHandler;
 
     @Inject
+    private GameManager gameManager;
+
+    @Inject
     private KitsMenu kitsMenu;
 
     @Default
     public void kitCommand(Player player, @Optional String name) {
+        if(!gameManager.containsRegion(player.getLocation())) {
+            messageHandler.send(player, "kit.use.outside");
+            return;
+        }
+
         if(name == null) {
             kitsMenu.open(player);
             return;

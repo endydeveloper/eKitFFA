@@ -7,14 +7,13 @@ import dev.triumphteam.gui.builder.item.ItemBuilder;
 import me.endydev.ffa.FFAPlugin;
 import me.endydev.ffa.api.FFAAPI;
 import me.endydev.ffa.api.data.FFAPlayer;
+import me.endydev.ffa.api.data.TemporalDropItem;
+import me.endydev.ffa.api.handler.level.LevelHandler;
 import me.endydev.ffa.api.perks.PerkType;
 import me.endydev.ffa.api.version.VersionSupport;
 import me.endydev.ffa.cache.TagPlayer;
 import me.endydev.ffa.configuration.ConfigFile;
 import me.endydev.ffa.database.Database;
-import me.endydev.ffa.perks.BowPerk;
-import me.endydev.ffa.perks.FishingRodPerk;
-import me.endydev.ffa.perks.GoldenHeadPerk;
 import me.endydev.ffa.perks.Perk;
 import me.endydev.ffa.repositories.FFAPlayerRepository;
 import me.endydev.ffa.utils.Utils;
@@ -22,11 +21,13 @@ import me.yushust.message.MessageHandler;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitTask;
 import team.unnamed.inject.Inject;
@@ -48,7 +49,7 @@ public class GameManager {
     private MessageHandler messageHandler;
 
     @Inject
-    private PlayerDataManager pdm;
+    private LevelHandler levelHandler;
 
     @Inject
     private ConfigFile config;
@@ -61,6 +62,9 @@ public class GameManager {
 
     @Inject
     private VersionSupport versionSupport;
+
+    @Inject
+    private ConfigFile configFile;
 
     @Inject
     private RegionManager regionManager;
@@ -88,16 +92,25 @@ public class GameManager {
 
     private static final Random RANDOM = new Random();
 
+    @Inject
+    private ObjectCache<UUID, TemporalDropItem> droppedItems;
     private final List<String> playersDrop = new ArrayList<>();
     private final Map<Block, BukkitTask> obsidianBlock = new HashMap<>();
-    private final List<Item> droppedItems = new ArrayList<>();
-    public List<Item> getDroppedItems() {
-        return droppedItems;
+    public Map<UUID, TemporalDropItem> getDroppedItems() {
+        return droppedItems.getAll();
     }
 
-    public void addDroppedItem(Item item) {
-        if(!droppedItems.contains(item)) {
-            droppedItems.add(item);
+    public TemporalDropItem addDroppedItem(Item item, int time) {
+        long current = System.currentTimeMillis();
+        UUID uuid = UUID.randomUUID();
+        TemporalDropItem dropItem = TemporalDropItem.of(uuid, item, current+time);
+        droppedItems.add(uuid, dropItem);
+        return dropItem;
+    }
+
+    public void addDroppedItem(List<Item> items, int time) {
+        for (Item item : items) {
+            addDroppedItem(item, time);
         }
     }
 
@@ -105,8 +118,8 @@ public class GameManager {
         taggeds.add(tagPlayer.getUniqueId(), tagPlayer);
     }
 
-    public void removeDroppedItem(Item item) {
-        droppedItems.remove(item);
+    public void removeDroppedItem(UUID uuid) {
+        droppedItems.remove(uuid);
     }
 
     public Map<Block, BukkitTask> getObsidianBlocks() {
@@ -122,10 +135,9 @@ public class GameManager {
     public void assitKill(Player player) {
         TagPlayer tagPlayer = getPlayerTag(player);
         if(tagPlayer.getAssister() != null) {
-            pdm.getPlayer(player.getUniqueId())
+            playerDataManager.getPlayer(tagPlayer.getAssister().getUniqueId())
                     .ifPresent(playerData -> {
-                        playerData.addCoins(config.getInt("assist.gold"));
-                        playerData.addXP(config.getInt("assist.xp"));
+                        rewardPlayer(tagPlayer.getAssister(), RewardType.ASSIST);
                         playerData.addAssist();
                         versionSupport.playAction(tagPlayer.getAssister(),
                                 utils.replaceDeathMessage(messageHandler.get(player, "action-bar.assist"), player)
@@ -159,11 +171,11 @@ public class GameManager {
     }
 
     public boolean containsRegion(Location location) {
-        return regionManager.getRegion() == null || !regionManager.getRegion().contains(location);
+        return regionManager.getRegion() == null || regionManager.getRegion().contains(location);
     }
 
     public void givePerk(Player player) {
-        FFAPlayer ffaPlayer = api.getPlayer(player.getUniqueId()).orElse(null);
+        FFAPlayer ffaPlayer = playerDataManager.getPlayer(player.getUniqueId()).orElse(null);
         if(ffaPlayer == null) {
             return;
         }
@@ -215,13 +227,7 @@ public class GameManager {
             taggeds.add(player.getUniqueId(), new TagPlayer(player));
         }
 
-        for(TagPlayer tagPlayer : taggeds.findAll()) {
-            if(tagPlayer.getUniqueId().equals(player.getUniqueId())) {
-                return tagPlayer;
-            }
-        }
-
-        return null;
+        return taggeds.find(player.getUniqueId()).orElse(null);
     }
 
     public String getPlayerState(Player player) {
@@ -329,18 +335,17 @@ public class GameManager {
         FFAPlayer ffaPlayer = playerDataManager.getPlayer(player.getUniqueId())
                 .orElseThrow(() -> new IllegalStateException("unable to find player on cache"));
 
-
         ffaPlayer.addCoins(goldsToAdd);
 
-        coreAPI.addNetworkXP(player, xpToAdd);
+        api.addXP(player, xpToAdd);
 
-        messageHandler.sendReplacing(player, "misc.rewards.combined",
-                "%diamonds%", goldsToAdd,
+        messageHandler.sendReplacing(player, "misc.rewards." + type.toString().toLowerCase(),
+                "%golds%", goldsToAdd,
                 "%xp%", xpToAdd
         );
     }
 
-    public void setKitToPlayer(Player player) {
+    public void setKitToPlaye(Player player) {
         FFAPlayer ffaPlayer = playerDataManager.getPlayer(player.getUniqueId()).orElse(null);
         if(ffaPlayer == null) {
             return;
@@ -403,6 +408,124 @@ public class GameManager {
         player.getInventory().setItem(7, new ItemStack(Material.COOKED_BEEF, 16));
         player.getInventory().setItem(8, new ItemStack(Material.ARROW, 12));
         player.updateInventory();
+    }
+
+    public void setLevelBar(Player player) {
+        playerDataManager.getPlayer(player.getUniqueId())
+                .ifPresent(ffaPlayer -> {
+                    int level = levelHandler.getLevelFromExperience(ffaPlayer.getXP());
+                    player.setLevel(level);
+                    player.setExp(calculatePercentage((float) ffaPlayer.getXP(), (float) levelHandler.getExperienceForLevel(level+1)));
+                });
+    }
+
+    public float calculatePercentage(float value, float max) {
+        if (max == 0) {
+            throw new IllegalArgumentException("El valor máximo no puede ser cero");
+        }
+
+        return value / max;
+    }
+
+    public void executeDeathMessage(Player player, EntityDamageEvent.DamageCause cause, Entity damager) {
+        TagPlayer tagPlayer = getPlayerTag(player);
+
+        if (tagPlayer == null) {
+            return;
+        }
+
+        boolean hasAttackers = tagPlayer.hasAttackers();
+        Player attacker = tagPlayer.getLastAttacker();
+
+        Collection<? extends Player> players = plugin.getServer().getOnlinePlayers();
+
+        switch (cause) {
+            case VOID:
+                if (hasAttackers) {
+                    versionSupport.playAction(tagPlayer.getLastAttacker(),
+                            utils.replaceDeathMessage(messageHandler.get(player, "action-bar.kill"), player));
+                    utils.playSound(configFile.getConfigurationSection("sounds.kill"), tagPlayer.getLastAttacker());
+                    for (Player p : players) {
+                        List<String> playerCause = messageHandler.getMany(p, "death-messages.void.player");
+                        p.sendMessage(utils.replaceDeathMessage(playerCause.get(Utils.randomInt(0, playerCause.size() - 1)), player, tagPlayer.getLastAttacker()));
+
+                    }
+                } else {
+                    for (Player p : players) {
+                        List<String> soloCause = messageHandler.getMany(p, "death-messages.void.solo");
+                        p.sendMessage(utils.replaceDeathMessage(soloCause.get(Utils.randomInt(0, soloCause.size() - 1)), player));
+                    }
+                }
+                return;
+            case ENTITY_ATTACK:
+                if (hasAttackers) {
+                    versionSupport.playAction(tagPlayer.getLastAttacker(), utils.replaceDeathMessage(messageHandler.get(player, "action-bar.kill"), player));
+                    utils.playSound(configFile.getConfigurationSection("sounds.kill"), tagPlayer.getLastAttacker());
+                    for (Player p : players) {
+                        List<String> playerCause = messageHandler.getMany(p, "death-messages.player");
+                        p.sendMessage(utils.replaceDeathMessage(playerCause.get(Utils.randomInt(0, playerCause.size() - 1)), player, tagPlayer.getLastAttacker()));
+                    }
+                }
+                return;
+            case FALL:
+                if (hasAttackers) {
+                    versionSupport.playAction(tagPlayer.getLastAttacker(), utils.replaceDeathMessage(messageHandler.get(player, "action-bar.kill"), player));
+                    utils.playSound(configFile.getConfigurationSection("sounds.kill"), tagPlayer.getLastAttacker());
+                    for (Player p : players) {
+                        List<String> playerCause = messageHandler.getMany(player, "death-messages.fall.player");
+                        p.sendMessage(utils.replaceDeathMessage(playerCause.get(Utils.randomInt(0, playerCause.size() - 1)), player, tagPlayer.getLastAttacker()));
+                    }
+                } else {
+                    for (Player p : players) {
+                        List<String> soloCause = messageHandler.getMany(player, "death-messages.fall.solo");
+                        p.sendMessage(utils.replaceDeathMessage(soloCause.get(Utils.randomInt(0, soloCause.size() - 1)), player));
+                    }
+                }
+                return;
+            case LAVA:
+                if (hasAttackers) {
+                    versionSupport.playAction(tagPlayer.getLastAttacker(), utils.replaceDeathMessage(messageHandler.get(player, "action-bar.kill"), player));
+                    utils.playSound(configFile.getConfigurationSection("sounds.kill"), tagPlayer.getLastAttacker());
+                    for (Player p : players) {
+                        List<String> playerCause = messageHandler.getMany(player, "death-messages.lava.player");
+                        p.sendMessage(utils.replaceDeathMessage(playerCause.get(Utils.randomInt(0, playerCause.size() - 1)), player));
+                    }
+                } else {
+                    for (Player p : players) {
+                        List<String> soloCause = messageHandler.getMany(player, "death-messages.lava.solo");
+                        p.sendMessage(utils.replaceDeathMessage(soloCause.get(Utils.randomInt(0, soloCause.size() - 1)), player));
+                    }
+                }
+                return;
+            case PROJECTILE: {
+                if(damager == null) {
+                    break;
+                }
+
+                if (damager instanceof Arrow) {
+                    if (hasAttackers) {
+                        versionSupport.playAction(tagPlayer.getLastAttacker(), utils.replaceDeathMessage(messageHandler.get(player, "action-bar.kill"), player));
+                        utils.playSound(configFile.getConfigurationSection("sounds.kill"), tagPlayer.getLastAttacker());
+                        for (Player p : players) {
+                            List<String> bowCause = messageHandler.getMany(player, "death-messages.projectile.bow.player");
+                            p.sendMessage(utils.replaceDeathMessage(bowCause.get(Utils.randomInt(0, bowCause.size() - 1)), player, tagPlayer.getLastAttacker()));
+
+                        }
+                    } else {
+                        for (Player p : players) {
+                            List<String> bowCause = messageHandler.getMany(player, "death-messages.projectile.bow.solo");
+                            p.sendMessage(utils.replaceDeathMessage(bowCause.get(Utils.randomInt(0, bowCause.size() - 1)), player));
+                        }
+                    }
+                }
+                return;
+            }
+        }
+
+        for (Player p : players) {
+            List<String> unknownCause = messageHandler.getMany(player, "death-messages.unknown");
+            p.sendMessage(utils.replaceDeathMessage(unknownCause.get(Utils.randomInt(0, unknownCause.size() - 1)), player));
+        }
     }
 
 
